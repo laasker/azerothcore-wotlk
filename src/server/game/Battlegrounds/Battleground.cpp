@@ -170,6 +170,10 @@ Battleground::Battleground()
     m_ArenaTeamIds[TEAM_ALLIANCE]   = 0;
     m_ArenaTeamIds[TEAM_HORDE]      = 0;
 
+    // SOLOQUEUE - Store rating
+    m_ArenaRating[TEAM_ALLIANCE]    = 0;
+    m_ArenaRating[TEAM_HORDE]       = 0;
+
     m_ArenaTeamMMR[TEAM_ALLIANCE]   = 0;
     m_ArenaTeamMMR[TEAM_HORDE]      = 0;
 

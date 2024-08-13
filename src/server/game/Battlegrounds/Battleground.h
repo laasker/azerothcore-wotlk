@@ -484,6 +484,7 @@ public:
     void BuildPvPLogDataPacket(WorldPacket& data);
     virtual bool UpdatePlayerScore(Player* player, uint32 type, uint32 value, bool doAddHonor = true);
 
+    uint8 GetTeamIndexByTeamId(TeamId teamId) const { return teamId == TEAM_ALLIANCE ? PVP_TEAM_ALLIANCE : PVP_TEAM_HORDE; }
     [[nodiscard]] uint32 GetPlayersCountByTeam(TeamId teamId) const { return m_PlayersCount[teamId]; }
     [[nodiscard]] uint32 GetAlivePlayersCountByTeam(TeamId teamId) const;   // used in arenas to correctly handle death in spirit of redemption / last stand etc. (killer = killed) cases
     void UpdatePlayersCountByTeam(TeamId teamId, bool remove)
@@ -501,6 +502,8 @@ public:
     [[nodiscard]] uint32 GetArenaTeamIdForTeam(TeamId teamId) const { return m_ArenaTeamIds[teamId]; }
     void SetArenaMatchmakerRating(TeamId teamId, uint32 MMR) { m_ArenaTeamMMR[teamId] = MMR; }
     [[nodiscard]] uint32 GetArenaMatchmakerRating(TeamId teamId) const { return m_ArenaTeamMMR[teamId]; }
+    // custom for solo 3v3
+    int32 GetSoloQueueRatingForTeam(TeamId teamId) const { return m_ArenaRating[GetTeamIndexByTeamId(teamId)]; }
 
     // Triggers handle
     // must be implemented in BG subclass
@@ -719,6 +722,9 @@ private:
     // Arena team ids by team
     uint32 m_ArenaTeamIds[PVP_TEAMS_COUNT];
     uint32 m_ArenaTeamMMR[PVP_TEAMS_COUNT];
+
+    // solo 3v3
+    uint32 m_ArenaRating[PVP_TEAMS_COUNT];
 
     // Limits
     uint32 m_LevelMin;

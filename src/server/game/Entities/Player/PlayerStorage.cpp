@@ -2952,6 +2952,7 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update, bool swap)
                 if (!swap)
                 {
                     RemoveItemDependentAurasAndCasts(pItem);
+                    sScriptMgr->OnUnEquip(this, pItem, slot, update);
                 }
 
                 // remove held enchantments, update expertise

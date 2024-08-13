@@ -2238,6 +2238,7 @@ public:
     [[nodiscard]] Battleground* GetBattleground(bool create = false) const;
 
     [[nodiscard]] bool InBattlegroundQueue(bool ignoreArena = false) const;
+    [[nodiscard]] bool InArenaQueue() const;
     [[nodiscard]] bool IsDeserter() const { return HasAura(26013); }
 
     [[nodiscard]] BattlegroundQueueTypeId GetBattlegroundQueueTypeId(uint32 index) const;

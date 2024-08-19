@@ -753,7 +753,7 @@ void Pet::Update(uint32 diff)
                                 GetMotionMaster()->Clear(false);
                                 GetMotionMaster()->MoveIdle();
 
-                                bool oldCmdAttack = GetCharmInfo()->IsCommandAttack();
+                                //bool oldCmdAttack = GetCharmInfo()->IsCommandAttack();
 
                                 GetCharmInfo()->SetIsCommandAttack(false);
                                 GetCharmInfo()->SetIsAtStay(true);
@@ -762,7 +762,7 @@ void Pet::Update(uint32 diff)
                                 GetCharmInfo()->SetIsReturning(false);
                                 GetCharmInfo()->SaveStayPosition(true);
 
-                                GetCharmInfo()->SetIsCommandAttack(oldCmdAttack);
+                                //GetCharmInfo()->SetIsCommandAttack(oldCmdAttack);
 
                                 AddSpellCooldown(tempspell, 0, spellInfo->IsCooldownStartedOnEvent() ? infinityCooldownDelay : 0);
 

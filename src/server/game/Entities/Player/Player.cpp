@@ -15259,6 +15259,7 @@ void Player::ReloadActionBar(uint8 spec)
 
     std::unordered_set<uint32> removedSpecAuras;
 
+    /* Nao precisa aparentemente, testei e já remove auras dos glyphs no codigo em lua
     // remove glyph auras
     for (uint8 slot = 0; slot < MAX_GLYPH_SLOT_INDEX; ++slot)
         if (uint32 glyphId = m_Glyphs[GetActiveSpec()][slot])
@@ -15267,6 +15268,7 @@ void Player::ReloadActionBar(uint8 spec)
                 RemoveAurasDueToSpell(glyphEntry->SpellId);
                 removedSpecAuras.insert(glyphEntry->SpellId);
             }
+    */
 
     // Patch 3.2.0: Switching spec removes paladins spell Righteous Fury (25780)
     if (IsClass(CLASS_PALADIN, CLASS_CONTEXT_ABILITY))

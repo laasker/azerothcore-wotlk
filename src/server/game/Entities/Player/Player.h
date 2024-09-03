@@ -1780,6 +1780,11 @@ public:
     void RemoveSpellCooldown(uint32 spell_id, bool update = false);
     void SendClearCooldown(uint32 spell_id, Unit* target);
 
+    // My Customs:
+    void ResetCooldownsPortaArena(bool removeActivePetCooldowns = true);
+    void ResetPlayersRaidSpellCooldowns(bool removeActivePetCooldowns = true);
+    void ResetPlayerCDonDeath(bool removeActivePetCooldowns = true);
+
     GlobalCooldownMgr& GetGlobalCooldownMgr() { return m_GlobalCooldownMgr; }
 
     void RemoveCategoryCooldown(uint32 cat);

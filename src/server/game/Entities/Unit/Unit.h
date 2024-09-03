@@ -2044,6 +2044,7 @@ public:
     void RemoveAurasWithFamily(SpellFamilyNames family, uint32 familyFlag1, uint32 familyFlag2, uint32 familyFlag3, ObjectGuid casterGUID);
     void RemoveAurasWithMechanic(uint32 mechanic_mask, AuraRemoveMode removemode = AURA_REMOVE_BY_DEFAULT, uint32 except = 0);
     void RemoveMovementImpairingAuras(bool withRoot);
+    void RemoveSlowImpairingAuras(bool withSnare);
     void RemoveAurasByShapeShift();
 
     void RemoveAreaAurasDueToLeaveWorld();

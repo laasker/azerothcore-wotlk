@@ -19448,6 +19448,24 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form, uint32 spellId) const
         switch (form)
         {
             case FORM_CAT:
+                /*
+                uint32 playerGuid = ToPlayer()->GetGUID().GetCounter();
+                QueryResult result = CharacterDatabase.Query("SELECT DisplayCatForm FROM custom_druid_form_display WHERE player_guid = " + std::to_string(ToPlayer()->GetGUID().GetCounter()));
+                if (result)
+                {
+                    Field* fields = result->Fetch();
+                    uint32 formNumber = fields[0].Get<uint32>();
+
+                    QueryResult formResult = CharacterDatabase.Query("SELECT display_id FROM druid_cat_forms WHERE form_number = " + std::to_string(formNumber));
+                    if (formResult)
+                    {
+                        Field* formFields = formResult->Fetch();
+                        uint32 displayId = formFields[0].Get<uint32>();
+                        return displayId;
+                    }
+                }
+                */
+
                 // Based on Hair color
                 if (getRace() == RACE_NIGHTELF)
                 {

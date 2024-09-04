@@ -203,11 +203,12 @@ void Arena::CheckWinConditions()
 
 void Arena::EndBattleground(TeamId winnerTeamId)
 {
-    //if (GetArenaType() == 4)
-    //{
-    //    EndSoloBattleground(winnerTeamId);
-    //    return;
-    //}
+    /*
+    if (GetArenaType() == 4)
+    {
+        EndSoloBattleground(winnerTeamId);
+        return;
+    }*/
 
     if (isRated())
     {

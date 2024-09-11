@@ -1291,7 +1291,7 @@ void Player::ToggleAFK()
     ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK);
 
     // afk player not allowed in battleground
-    if (!IsGameMaster() && isAFK() && InBattleground())
+    if (!IsGameMaster() && isAFK() && (InBattleground() || InArena()))
         LeaveBattleground();
 }
 
@@ -10943,9 +10943,11 @@ uint32 Player::GetMaxPersonalArenaRatingRequirement(uint32 minarenaslot) const
     uint32 max_personal_rating = 0;
     for (uint8 i = minarenaslot; i < MAX_ARENA_SLOT; ++i)
     {
+        /*
         // Comprar items com rating do Solo 3v3
         if (i == 2 && sWorld->getBoolConfig(CONFIG_SOLO_3V3_VENDOR_RATING) == false)
             continue;
+            */
 
         if (ArenaTeam* at = sArenaTeamMgr->GetArenaTeamById(GetArenaTeamId(i)))
         {
@@ -11392,6 +11394,19 @@ void Player::LeaveBattleground(Battleground* bg)
             CharacterDatabase.Execute(stmt);
         }
         sScriptMgr->OnBattlegroundDesertion(this, BG_DESERTION_TYPE_LEAVE_BG);
+    }
+
+    if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+    {
+        if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_TRACK_DESERTERS))
+        {
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
+            stmt->SetData(0, GetGUID().GetCounter());
+            stmt->SetData(1, BG_DESERTION_TYPE_LEAVE_BG);
+            CharacterDatabase.Execute(stmt);
+        }
+        sScriptMgr->OnBattlegroundDesertion(this, BG_DESERTION_TYPE_LEAVE_BG);
+        sScriptMgr->OnArenaDesertion(this, bg);
     }
 
     bg->RemovePlayerAtLeave(this);

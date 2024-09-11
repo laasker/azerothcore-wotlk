@@ -95,6 +95,7 @@ enum ArenaTeamTypes
 {
     ARENA_TEAM_2v2      = 2,
     ARENA_TEAM_3v3      = 3,
+    ARENA_TEAM_3v3SOLO  = 4,
     ARENA_TEAM_5v5      = 5
 };
 

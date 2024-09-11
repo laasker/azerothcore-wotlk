@@ -1309,10 +1309,24 @@ void Battleground::ReadyMarkerClicked(Player* p)
 {
     if (!isArena() || GetStatus() >= STATUS_IN_PROGRESS || GetStartDelayTime() <= BG_START_DELAY_15S || (m_Events & BG_STARTING_EVENT_3) || p->IsSpectator())
         return;
+
     readyMarkerClickedSet.insert(p->GetGUID());
     uint32 count = readyMarkerClickedSet.size();
     uint32 req = ArenaTeam::GetReqPlayersForType(GetArenaType());
-    p->GetSession()->SendNotification("You are marked as ready %u/%u", count, req);
+
+    // Acc GM conta como 5
+    if (p->GetSession()->GetSecurity() >= SEC_GAMEMASTER)
+    {
+        count += 5;
+    }
+    /*
+    SOLO3v3
+    if (GetArenaType() == 4)
+    {
+        req = 6;
+    }*/
+
+    p->GetSession()->SendNotification("You are marked as ready {}/{}", count, req);
     if (count == req)
     {
         m_Events |= BG_STARTING_EVENT_2;

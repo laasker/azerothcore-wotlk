@@ -932,6 +932,8 @@ void ArenaTeam::SaveToDB(bool forceMemberSave)
     if (!sScriptMgr->CanSaveToDB(this))
         return;
 
+    LOG_ERROR("solo3v3", "ArenaTeam::SaveToDB - Saved to DB called");
+
     // Save team and member stats to db
     // Called after a match has ended or when calculating arena_points
 
@@ -1034,7 +1036,8 @@ void ArenaTeam::CreateTempArenaTeam(std::vector<Player*> playerList, uint8 type,
 {
     auto playerCountInTeam = static_cast<uint32>(playerList.size());
 
-    const auto standardArenaType = { ARENA_TYPE_2v2, ARENA_TYPE_3v3/*, ARENA_TYPE_5v5*/ };
+    //const auto standardArenaType = { ARENA_TYPE_2v2, ARENA_TYPE_3v3, ARENA_TYPE_5v5 };
+    const auto standardArenaType = { ARENA_TYPE_2v2, ARENA_TYPE_3v3 };
     bool isStandardArenaType = std::find(std::begin(standardArenaType), std::end(standardArenaType), type) != std::end(standardArenaType);
     if (isStandardArenaType)
         ASSERT(playerCountInTeam == GetReqPlayersForType(type));
@@ -1090,6 +1093,7 @@ std::unordered_map<uint32, uint8> ArenaTeam::ArenaSlotByType =
 {
     { ARENA_TEAM_2v2, ARENA_SLOT_2v2},
     { ARENA_TEAM_3v3, ARENA_SLOT_3v3},
+    { ARENA_TEAM_3v3SOLO, ARENA_SLOT_5v5}, // fix errors 'Unknown arena team type 4 for some arena team'
     { ARENA_TEAM_5v5, ARENA_SLOT_5v5}
 };
 

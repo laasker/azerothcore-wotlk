@@ -3574,6 +3574,16 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, AuraEffect const
         if (m_caster->ToPlayer()->GetCommandStatus(CHEAT_CASTTIME))
             m_casttime = 0;
 
+    /*
+    // Instant casts com Arena Preparation (com exceções p profissoes, talvez tem mais exceções p adicionar)
+    if (Player* plCaster = m_caster->ToPlayer())
+    {
+        Battleground* bg = plCaster->GetBattleground();
+        if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
+            if (!m_spellInfo->HasEffect(SPELL_EFFECT_CREATE_ITEM) && !m_spellInfo->HasEffect(SPELL_EFFECT_ENCHANT_ITEM) && !m_spellInfo->HasEffect(SPELL_EFFECT_MILLING) && !m_spellInfo->HasEffect(SPELL_EFFECT_DISENCHANT))
+                m_casttime = 0;
+    }*/
+
     // don't allow channeled spells / spells with cast time to be casted while moving
     // (even if they are interrupted on moving, spells with almost immediate effect get to have their effect processed before movement interrupter kicks in)
     if ((m_spellInfo->IsChanneled() || m_casttime) && m_caster->GetTypeId() == TYPEID_PLAYER && m_caster->isMoving() && m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT && !IsTriggered())

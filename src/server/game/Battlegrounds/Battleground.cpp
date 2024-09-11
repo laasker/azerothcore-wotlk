@@ -1057,6 +1057,8 @@ void Battleground::RemovePlayerAtLeave(Player* player)
             AddToBGFreeSlotQueue();
             sBattlegroundMgr->ScheduleQueueUpdate(0, 0, bgQueueTypeId, bgTypeId, GetBracketId());
         }
+
+        sScriptMgr->OnArenaRemovePlayerAtLeave(this, player);
     }
 
     // Remove shapeshift auras

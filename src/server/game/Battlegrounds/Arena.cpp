@@ -205,7 +205,7 @@ void Arena::EndBattleground(TeamId winnerTeamId)
 {
     if (isRated())
     {
-        if (GetArenaType() == 4)
+        if (GetArenaType() == 44)
         {
             EndSoloBattleground(winnerTeamId);
             return;

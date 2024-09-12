@@ -583,6 +583,7 @@ public: /* BGScript */
     void OnBattlegroundAddPlayer(Battleground* bg, Player* player);
     void OnBattlegroundBeforeAddPlayer(Battleground* bg, Player* player);
     void OnBattlegroundRemovePlayerAtLeave(Battleground* bg, Player* player);
+    void OnArenaRemovePlayerAtLeave(Battleground* bg, Player* player);
     void OnQueueUpdate(BattlegroundQueue* queue, uint32 diff, BattlegroundTypeId bgTypeId, BattlegroundBracketId bracket_id, uint8 arenaType, bool isRated, uint32 arenaRating);
     bool OnQueueUpdateValidity(BattlegroundQueue* queue, uint32 diff, BattlegroundTypeId bgTypeId, BattlegroundBracketId bracket_id, uint8 arenaType, bool isRated, uint32 arenaRating);
     void OnAddGroup(BattlegroundQueue* queue, GroupQueueInfo* ginfo, uint32& index, Player* leader, Group* group, BattlegroundTypeId bgTypeId, PvPDifficultyEntry const* bracketEntry,

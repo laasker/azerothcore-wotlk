@@ -49,6 +49,11 @@ void ScriptMgr::OnBattlegroundRemovePlayerAtLeave(Battleground* bg, Player* play
     CALL_ENABLED_HOOKS(AllBattlegroundScript, ALLBATTLEGROUNDHOOK_ON_BATTLEGROUND_REMOVE_PLAYER_AT_LEAVE, script->OnBattlegroundRemovePlayerAtLeave(bg, player));
 }
 
+void ScriptMgr::OnArenaRemovePlayerAtLeave(Battleground* bg, Player* player)
+{
+    CALL_ENABLED_HOOKS(AllBattlegroundScript, ALLBATTLEGROUNDHOOK_ON_ARENA_REMOVE_PLAYER_AT_LEAVE, script->OnArenaRemovePlayerAtLeave(bg, player));
+}
+
 void ScriptMgr::OnQueueUpdate(BattlegroundQueue* queue, uint32 diff, BattlegroundTypeId bgTypeId, BattlegroundBracketId bracket_id, uint8 arenaType, bool isRated, uint32 arenaRating)
 {
     CALL_ENABLED_HOOKS(AllBattlegroundScript, ALLBATTLEGROUNDHOOK_ON_QUEUE_UPDATE, script->OnQueueUpdate(queue, diff, bgTypeId, bracket_id, arenaType, isRated, arenaRating));

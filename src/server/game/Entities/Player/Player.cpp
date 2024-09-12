@@ -11406,7 +11406,7 @@ void Player::LeaveBattleground(Battleground* bg)
             CharacterDatabase.Execute(stmt);
         }
         sScriptMgr->OnBattlegroundDesertion(this, BG_DESERTION_TYPE_LEAVE_BG);
-        sScriptMgr->OnArenaDesertion(this, bg);
+        //sScriptMgr->OnArenaDesertion(this, bg);
     }
 
     bg->RemovePlayerAtLeave(this);

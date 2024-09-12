@@ -29,6 +29,7 @@ enum AllBattlegroundHook
     ALLBATTLEGROUNDHOOK_ON_BATTLEGROUND_ADD_PLAYER,
     ALLBATTLEGROUNDHOOK_ON_BATTLEGROUND_BEFORE_ADD_PLAYER,
     ALLBATTLEGROUNDHOOK_ON_BATTLEGROUND_REMOVE_PLAYER_AT_LEAVE,
+    ALLBATTLEGROUNDHOOK_ON_ARENA_REMOVE_PLAYER_AT_LEAVE,
     ALLBATTLEGROUNDHOOK_ON_QUEUE_UPDATE,
     ALLBATTLEGROUNDHOOK_ON_QUEUE_UPDATE_VALIDITY,
     ALLBATTLEGROUNDHOOK_ON_ADD_GROUP,
@@ -76,6 +77,9 @@ public:
 
     // Remove player at leave BG
     virtual void OnBattlegroundRemovePlayerAtLeave(Battleground* /*bg*/, Player* /*player*/) { }
+
+    // Remove player at leave Arena
+    virtual void OnArenaRemovePlayerAtLeave(Battleground* /*bg*/, Player* /*player*/) { }
 
     virtual void OnQueueUpdate(BattlegroundQueue* /*queue*/, uint32 /* diff */, BattlegroundTypeId /* bgTypeId */, BattlegroundBracketId /* bracket_id */, uint8 /* arenaType */, bool /* isRated */, uint32 /* arenaRating */) { }
 

@@ -567,7 +567,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
         if (!ginfo.ArenaType)
             sBattlegroundMgr->ScheduleQueueUpdate(ginfo.ArenaMatchmakerRating, ginfo.ArenaType, bgQueueTypeId, bgTypeId, bracketEntry->GetBracketId());
 
-        // track if player refuses to join the BG after being invited
+        // track if player refuses to join the BG after being invited -- 
         if (bg->isBattleground() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
         {
             if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_TRACK_DESERTERS))

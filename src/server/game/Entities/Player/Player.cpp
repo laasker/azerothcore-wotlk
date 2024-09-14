@@ -11293,6 +11293,12 @@ void Player::LeaveBattleground(Battleground* bg)
         sScriptMgr->OnBattlegroundDesertion(this, BG_DESERTION_TYPE_LEAVE_BG);
     }
 
+    // Deserter tracker - leave Arena
+    if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+    {
+        sScriptMgr->OnArenaDesertion(this, BG_DESERTION_TYPE_LEAVE_BG);
+    }
+
     bg->RemovePlayerAtLeave(this);
 
     // xinef: reset corpse reclaim time

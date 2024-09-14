@@ -32,6 +32,7 @@ enum PlayerHook
     PLAYERHOOK_ON_PLAYER_RELEASED_GHOST,
     PLAYERHOOK_ON_SEND_INITIAL_PACKETS_BEFORE_ADD_TO_MAP,
     PLAYERHOOK_ON_BATTLEGROUND_DESERTION,
+    PLAYERHOOK_ON_ARENA_DESERTION,
     PLAYERHOOK_ON_PLAYER_COMPLETE_QUEST,
     PLAYERHOOK_ON_PVP_KILL,
     PLAYERHOOK_ON_PLAYER_PVP_FLAG_CHANGE,
@@ -225,6 +226,9 @@ public:
 
     // Called when a player does a desertion action (see BattlegroundDesertionType)
     virtual void OnBattlegroundDesertion(Player* /*player*/, BattlegroundDesertionType const /*desertionType*/) { }
+
+    // Called when a player does a desertion action in Arena(see BattlegroundDesertionType)
+    virtual void OnArenaDesertion(Player* /*player*/, BattlegroundDesertionType const /*desertionType*/) { }
 
     // Called when a player completes a quest
     virtual void OnPlayerCompleteQuest(Player* /*player*/, Quest const* /*quest_id*/) { }

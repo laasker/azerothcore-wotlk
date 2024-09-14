@@ -637,6 +637,15 @@ void WorldSession::LogoutPlayer(bool save)
                     sScriptMgr->OnBattlegroundDesertion(_player, BG_DESERTION_TYPE_INVITE_LOGOUT);
                 }
 
+                // BATTLEGROUND_QUEUE_2v2 = 8 and MAX_BATTLEGROUND_QUEUE_TYPES = 20
+                if (bgQueueTypeId >= 8 && bgQueueTypeId < 20) 
+                {
+                    if (_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
+                    {
+                        sScriptMgr->OnArenaDesertion(_player, BG_DESERTION_TYPE_INVITE_LOGOUT);
+                    }
+                }
+
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId).RemovePlayer(_player->GetGUID(), true);
             }

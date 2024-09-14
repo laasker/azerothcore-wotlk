@@ -580,6 +580,12 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
 
             sScriptMgr->OnBattlegroundDesertion(_player, BG_DESERTION_TYPE_LEAVE_QUEUE);
         }
+
+        // track if player refuses to join the Arena after being invited
+        if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+        {
+            sScriptMgr->OnArenaDesertion(_player, BG_DESERTION_TYPE_LEAVE_QUEUE);
+        }
     }
 }
 

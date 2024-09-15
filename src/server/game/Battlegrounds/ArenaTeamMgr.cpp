@@ -107,7 +107,7 @@ ArenaTeam* ArenaTeamMgr::GetArenaTeamByCaptain(ObjectGuid guid, const uint32 typ
 {
     for (ArenaTeamContainer::const_iterator itr = ArenaTeamStore.begin(); itr != ArenaTeamStore.end(); ++itr)
     {
-        if (itr->second->GetCaptain() == guid && itr->second->GetType() == type)
+        if (itr->second->GetCaptain() == guid && itr->second->GetType() == type && itr->second->GetId() < MAX_ARENA_TEAM_ID)
         {
             return itr->second;
         }

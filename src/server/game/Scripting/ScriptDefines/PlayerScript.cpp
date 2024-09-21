@@ -49,11 +49,6 @@ void ScriptMgr::OnBattlegroundDesertion(Player* player, BattlegroundDesertionTyp
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_BATTLEGROUND_DESERTION, script->OnBattlegroundDesertion(player, desertionType));
 }
 
-void ScriptMgr::OnArenaDesertion(Player* player, BattlegroundDesertionType const desertionType)
-{
-    CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_ARENA_DESERTION, script->OnArenaDesertion(player, desertionType));
-}
-
 void ScriptMgr::OnPlayerJustDied(Player* player)
 {
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_PLAYER_JUST_DIED, script->OnPlayerJustDied(player));

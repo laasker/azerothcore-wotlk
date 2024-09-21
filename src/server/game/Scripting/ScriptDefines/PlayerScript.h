@@ -227,9 +227,6 @@ public:
     // Called when a player does a desertion action (see BattlegroundDesertionType)
     virtual void OnBattlegroundDesertion(Player* /*player*/, BattlegroundDesertionType const /*desertionType*/) { }
 
-    // Called when a player does a desertion action in Arena(see BattlegroundDesertionType)
-    virtual void OnArenaDesertion(Player* /*player*/, BattlegroundDesertionType const /*desertionType*/) { }
-
     // Called when a player completes a quest
     virtual void OnPlayerCompleteQuest(Player* /*player*/, Quest const* /*quest_id*/) { }
 

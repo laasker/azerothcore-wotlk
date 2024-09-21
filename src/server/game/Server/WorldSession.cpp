@@ -642,7 +642,7 @@ void WorldSession::LogoutPlayer(bool save)
                 {
                     if (_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
                     {
-                        sScriptMgr->OnArenaDesertion(_player, BG_DESERTION_TYPE_INVITE_LOGOUT);
+                        sScriptMgr->OnBattlegroundDesertion(_player, ARENA_DESERTION_TYPE_INVITE_LOGOUT);
                     }
                 }
 

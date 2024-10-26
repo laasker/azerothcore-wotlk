@@ -15233,6 +15233,136 @@ void Player::ActivateSpec(uint8 spec)
     sScriptMgr->OnAfterSpecSlotChanged(this, GetActiveSpec());
 }
 
+void Player::ReloadActionBar(uint8 spec)
+{
+    // interrupt currently casted spell just in case
+    if (IsNonMeleeSpellCast(false))
+        InterruptNonMeleeSpells(false);
+
+    // remove pet, it will be resummoned later
+    if (Pet* pet = GetPet())
+        RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
+
+    // remove other summoned units and clear reactives
+    ClearAllReactives();
+    UnsummonAllTotems();
+    RemoveAllControlled();
+
+    // let client clear his current Actions
+    //SendActionButtons(1); eh necessario ?
+    uint8 oldSpec = GetActiveSpec();
+
+    std::unordered_set<uint32> removedSpecAuras;
+
+    /*
+    // xinef: reset talent auras
+    for (PlayerTalentMap::iterator itr = m_talents.begin(); itr != m_talents.end(); ++itr)
+    {
+        if (itr->second->State == PLAYERSPELL_REMOVED)
+            continue;
+
+        // xinef: remove all active talent auras
+        if (!(itr->second->specMask & GetActiveSpecMask()))
+            continue;
+
+        _removeTalentAurasAndSpells(itr->first);
+
+        // pussywizard: was => isn't
+        if (!itr->second->IsInSpec(spec) && !itr->second->inSpellBook)
+            SendLearnPacket(itr->first, false);
+
+        removedSpecAuras.insert(itr->first);
+    }
+
+    // xinef: set active spec as new one
+    SetActiveSpec(spec);
+    uint32 spentTalents = 0;
+
+    // xinef: add talent auras
+    for (PlayerTalentMap::iterator itr = m_talents.begin(); itr != m_talents.end(); ++itr)
+    {
+        if (itr->second->State == PLAYERSPELL_REMOVED)
+            continue;
+
+        // xinef: talent not in new spec
+        if (!(itr->second->specMask & GetActiveSpecMask()))
+            continue;
+
+        // pussywizard: wasn't => is
+        if (!itr->second->IsInSpec(oldSpec) && !itr->second->inSpellBook)
+            SendLearnPacket(itr->first, true);
+
+        _addTalentAurasAndSpells(itr->first);
+        TalentSpellPos const* talentPos = GetTalentSpellPos(itr->first);
+        spentTalents += talentPos->rank + 1;
+
+        removedSpecAuras.erase(itr->first);
+    }
+    */
+
+    // Patch 3.2.0: Switching spec removes paladins spell Righteous Fury (25780)
+    if (IsClass(CLASS_PALADIN, CLASS_CONTEXT_ABILITY))
+        RemoveAurasDueToSpell(25780);
+    // remover mais spells talvez? ex: buff energy rogue assassin, fazer testes.
+
+
+    // Remove talented single target auras at other targets
+    AuraList& scAuras = GetSingleCastAuras();
+    for (AuraList::iterator iter = scAuras.begin(); iter != scAuras.end();)
+    {
+        Aura* aura = *iter;
+        if (!HasActiveSpell(aura->GetId()) && !HasTalent(aura->GetId(), GetActiveSpec()) && !aura->GetCastItemGUID())
+        {
+            aura->Remove();
+            iter = scAuras.begin();
+        }
+        else
+            ++iter;
+    }
+
+    // acho que remove glyphs, talvez talents, talvez n é necessario ja que reseta os talents antes de dar learn (vai remover talents apos dar learn neles maybe)
+    /* Pode afetar auras dos talentos, essa função é chamada após dar learn nos talents
+    * 
+    // Remove auras triggered/activated by talents/glyphs
+    // Mostly explicit casts in dummy aura scripts
+    if (!removedSpecAuras.empty())
+    {
+        for (AuraMap::iterator iter = m_ownedAuras.begin(); iter != m_ownedAuras.end();)
+        {
+            Aura* aura = iter->second;
+            if (SpellInfo const* triggeredByAuraSpellInfo = aura->GetTriggeredByAuraSpellInfo())
+            {
+                if (removedSpecAuras.find(triggeredByAuraSpellInfo->Id) != removedSpecAuras.end())
+                {
+                    RemoveOwnedAura(iter);
+                    continue;
+                }
+            }
+            ++iter;
+        }
+    }*/
+
+    // load them asynchronously - atualiza a ActionBar
+    {
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_ACTIONS_SPEC);
+        stmt->SetData(0, GetGUID().GetCounter());
+        stmt->SetData(1, m_activeSpec);
+
+        WorldSession* mySess = GetSession();
+        mySess->GetQueryProcessor().AddCallback(CharacterDatabase.AsyncQuery(stmt)
+            .WithPreparedCallback([mySess](PreparedQueryResult result)
+            {
+                // safe callback, we can't pass this pointer directly
+                // in case player logs out before db response (player would be deleted in that case)
+                if (Player* thisPlayer = mySess->GetPlayer())
+                    thisPlayer->LoadActions(result);
+            }));
+    }
+
+    //sScriptMgr->OnAfterSpecSlotChanged(this, GetActiveSpec());
+}
+
+
 void Player::LoadActions(PreparedQueryResult result)
 {
     if (result)

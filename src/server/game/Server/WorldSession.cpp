@@ -638,7 +638,8 @@ void WorldSession::LogoutPlayer(bool save)
                 }
 
                 // BATTLEGROUND_QUEUE_2v2 = 8 and MAX_BATTLEGROUND_QUEUE_TYPES = 20
-                if (bgQueueTypeId >= 8 && bgQueueTypeId < 20) 
+                //if (bgQueueTypeId >= 8 && bgQueueTypeId < 20)
+                if (bgQueueTypeId >= BATTLEGROUND_QUEUE_2v2 && bgQueueTypeId < MAX_BATTLEGROUND_QUEUE_TYPES)
                 {
                     if (_player->IsInvitedForBattlegroundQueueType(bgQueueTypeId))
                     {

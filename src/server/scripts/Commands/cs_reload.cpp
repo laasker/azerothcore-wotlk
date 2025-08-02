@@ -121,6 +121,7 @@ public:
             { "npc_text_locale",               HandleReloadLocalesNpcTextCommand,             SEC_ADMINISTRATOR, Console::Yes },
             { "page_text_locale",              HandleReloadLocalesPageTextCommand,            SEC_ADMINISTRATOR, Console::Yes },
             { "points_of_interest_locale",     HandleReloadLocalesPointsOfInterestCommand,    SEC_ADMINISTRATOR, Console::Yes },
+            { "player_shapeshift_model",       HandleReloadPlayerShapeshiftModelCommand,      SEC_ADMINISTRATOR, Console::Yes },
             { "quest_template_locale",         HandleReloadLocalesQuestCommand,               SEC_ADMINISTRATOR, Console::Yes },
             { "quest_offer_reward_locale",     HandleReloadLocalesQuestOfferRewardCommand,    SEC_ADMINISTRATOR, Console::Yes },
             { "quest_request_item_locale",     HandleReloadLocalesQuestRequestItemsCommand,   SEC_ADMINISTRATOR, Console::Yes },
@@ -1152,6 +1153,14 @@ public:
         LOG_INFO("server.loading", "Reloading Points Of Interest Locale ... ");
         sObjectMgr->LoadPointOfInterestLocales();
         handler->SendGlobalGMSysMessage("DB table `points_of_interest_locale` reloaded.");
+        return true;
+    }
+
+    static bool HandleReloadPlayerShapeshiftModelCommand(ChatHandler* handler)
+    {
+        LOG_INFO("server.loading", "Reloading forms ... ");
+        sObjectMgr->LoadPlayerShapeshiftModels();
+        handler->SendGlobalGMSysMessage("DB table `player forms` reloaded.");
         return true;
     }
 

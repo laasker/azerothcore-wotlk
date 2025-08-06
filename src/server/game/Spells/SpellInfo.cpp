@@ -1991,6 +1991,17 @@ bool SpellInfo::CheckTargetCreatureType(Unit const* target) const
         else
             return true;
     }
+
+    // Frost Trap slow (Frost Trap launcher - tentar mudar o id) - talvez nem funciona ou nao precisa
+    /*
+    if (Id == 67035)
+    {
+        if (target && (target->IsPlayer() || (target->GetOwner() && target->GetOwner()->IsPlayer())))
+            return false;
+        else
+            return true;
+    }*/
+
     uint32 creatureType = target->GetCreatureTypeMask();
     return !TargetCreatureType || !creatureType || (creatureType & TargetCreatureType);
 }

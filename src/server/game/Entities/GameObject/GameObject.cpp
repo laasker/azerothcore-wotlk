@@ -2094,6 +2094,12 @@ void GameObject::CastSpell(Unit* target, uint32 spellId)
     if (!trigger)
         return;
 
+    // Explosive Trap (Trap Launcher) nao funciona vs Players (em World PvP/Duel)
+    if (spellId == 83390 && target && (target->IsPlayer() || (target->GetOwner() && target->GetOwner()->IsPlayer())))
+    {
+        return;
+    }
+
     if (Unit* owner = GetOwner())
     {
         trigger->SetLevel(owner->GetLevel(), false);

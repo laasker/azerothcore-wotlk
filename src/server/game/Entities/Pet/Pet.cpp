@@ -2532,6 +2532,7 @@ float Pet::GetNativeObjectScale() const
             case CREATURE_FAMILY_WARP_STALKER:
             case CREATURE_FAMILY_WASP:
             case CREATURE_FAMILY_WIND_SERPENT:
+            case CREATURE_FAMILY_CROCOLISK:
                 maxScale = 1.0f;
                 break;
             default:

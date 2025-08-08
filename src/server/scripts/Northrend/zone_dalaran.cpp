@@ -120,7 +120,7 @@ enum spells
     // Sewers Warrior Spells
     SPELL_WARRIOR_BATTLESHOUT       = 9128,
     SPELL_WARRIOR_DISARM            = 6713,
-    SPELL_WARRIOR_SHOUT             = 19134,
+    SPELL_WARRIOR_SHOUT             = 69652,  // Bladestorm - mob ficava caindo pra baixo da arena (antigo é 19134 (Fear))
     SPELL_WARRIOR_HAMSTRING         = 9080,
 
     // Sewers Mage Spells

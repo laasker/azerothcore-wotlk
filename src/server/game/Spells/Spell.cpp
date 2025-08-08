@@ -2479,7 +2479,12 @@ void Spell::AddUnitTarget(Unit* target, uint32 effectMask, bool checkIfValid /*=
             m_delayMoment = targetInfo.timeDelay;
     }
     else
-        targetInfo.timeDelay = 0LL;
+        //targetInfo.timeDelay = 0LL;
+    {
+        targetInfo.timeDelay = GetCCDelay(m_spellInfo);
+        if (m_delayMoment == 0 || m_delayMoment > targetInfo.timeDelay)
+            m_delayMoment = targetInfo.timeDelay;
+    }
 
     // If target reflect spell back to caster
     if (targetInfo.missCondition == SPELL_MISS_REFLECT)
@@ -4044,7 +4049,8 @@ void Spell::_cast(bool skipCheck)
     }
 
     // Okay, everything is prepared. Now we need to distinguish between immediate and evented delayed spells
-    if ((m_spellInfo->Speed > 0.0f && !m_spellInfo->IsChanneled())/* xinef: we dont need this || m_spellInfo->Id == 14157*/)
+    //if ((m_spellInfo->Speed > 0.0f && !m_spellInfo->IsChanneled())/* xinef: we dont need this || m_spellInfo->Id == 14157*/)
+    if (((m_spellInfo->Speed > 0.0f || GetCCDelay(m_spellInfo) > 0) && !m_spellInfo->IsChanneled()))
     {
         // Remove used for cast item if need (it can be already nullptr after TakeReagents call
         // in case delayed spell remove item at cast delay start
@@ -6835,6 +6841,209 @@ SpellCastResult Spell::CheckCast(bool strict)
 
     // all ok
     return SPELL_CAST_OK;
+}
+
+uint32 Spell::GetCCDelay(SpellInfo const* _spell)
+{
+    const uint32 delayForRoots = 60;
+    const uint32 delayForStuns = 110;
+    const uint32 delayForDisarms = 50;
+    const uint32 delayForDisorients = 100;
+    const uint32 delayForFears = 100;
+    const uint32 delayForHorrors = 100;
+    const uint32 delayForOpenerStuns = 70;
+    const uint32 delayForBanishes = 100;
+    const uint32 delayForSilences = 90;
+    const uint32 delayForInstantSpells = 75;
+
+    // CCDelay for spell with auras
+    uint8 CCDArraySize = 7;
+    AuraType auraWithCCD[] =
+    {
+        SPELL_AURA_MOD_STUN,
+        SPELL_AURA_MOD_CONFUSE,
+        SPELL_AURA_MOD_FEAR,
+        SPELL_AURA_MOD_SILENCE,
+        SPELL_AURA_MOD_DISARM,
+        SPELL_AURA_MOD_ROOT,
+        SPELL_AURA_MOD_POSSESS
+    };
+
+    uint32 auraCCDelay[] =
+    {
+        115,
+        115,
+        115,
+        115,
+        70,
+        70,
+        115
+    };
+
+    // Cases for specific race/class spells
+    switch (_spell->Id)
+    {
+    case 11578: // Warrior - Charge
+    case 7922: // Charge Stun
+    case 65929: // Warrior - Charge triggered
+    case 47996: // Warlock - Pet - Felguard's intercept
+    case 47995: // Warlock - Pet - Felguard intercept trigg.
+    case 58861: // Shaman - Feral bash
+        /*case 1330:  // Rogue - Garote silence // Bug - rogue sai do stealth mas tem delay para dar o silence, fazendo com que de para dar CC no rogue (priest spama fear qnd o rogue sai do stealth)
+        case 1833: // Rogue - CheapShot
+            case 9005: // Druid - Pounce R1
+            case 9823: // Pounce R2
+            case 9827: // Pounce R3
+            case 27006: // Pounce R4
+        case 49803: // Pounce R5*/
+        return delayForOpenerStuns;
+    case 20252: // Warrior - Intercept
+    case 20253: // Warrior - Intercept
+    case 12809: // Warrior - Concussion Blow
+    case 46968: // Warrior - Shockwave
+    case 853:   // Paladin - Hammer of Justice
+    case 5588: // Hoj R2
+    case 5589: // Hoj R3
+    case 10308: // Hoj R4
+    case 20170: // Paladin - Seal of justice stun proc
+    case 24394: // Hunter - Pet - Intimidation
+    case 408:   // Rogue - Kidney Shot
+    case 8643: // kidney R2
+    case 64044: // Priest - Psychic Horror
+    case 47481: // DK - Pet - Gnaw (ghoul's stun)
+    case 44572: // Mage - Deep Freeze
+    case 12355: // Mage - Talent - Impact
+    case 60995: // Warlock - Demon charge
+    case 54785: // Demon Charge
+    case 30283: // Warlock - Shadowfury
+    case 30413:
+    case 30414:
+    case 47846:
+    case 47847: // Shadowfury R5
+    case 5211: // Druid - Bash
+    case 6798:
+    case 8983:
+    case 22570: // Druid - Maim
+    case 49802: // Maim R2
+    case 46026: // War Stomp - Tauren's racial
+        return delayForStuns;
+    case 5246: // Warrior - Intimidating Shout
+    case 20511: // Intimidating Shout
+    case 10326: // Paladin - Turn Evil
+    case 1513:  // Hunter - Scare beast
+    case 14326:
+    case 14327:
+    case 10890: // Priest - Psychic Scream
+    case 10888: // Psychic Scream R3
+    case 8124: // Psychic Scream R2
+    case 8122: // Psychic Scream R1
+    case 5782: // Warlock - Fear
+    case 6213:
+    case 6215:
+    case 5484: // Warlock - Howl of Terror
+    case 17928:
+        return delayForFears;
+    case 676: // Warrior - Disarm
+    case 51722: // Rogue - Dismantle
+        return delayForDisarms;
+    case 34490: // Hunter - Silencing shot
+    case 18425: // Rogue - Talent - Silenced - Improved Kick
+    case 15487: // Priest - Silence
+    case 47476: // DK - Strangulate
+        //case 24259: // Warlock - Pet - Spell Lock - Silenced
+    case 18469: // Mage - Talent - Improved Counter spell silence
+        return delayForSilences;
+    case 20066: // Paladin - Repentance
+    case 19503: // Hunter - Scatter Shot
+    case 19386: // Hunter - Wyvern Sting
+    case 24132:
+    case 24133:
+    case 27068:
+    case 49011:
+    case 49012: // Wyvern Sting R6
+    case 2094: // Rogue - Blind
+    case 1776: // Rogue - Gouge
+    case 6770: // Rogue - Sap
+    case 2070:
+    case 11297:
+    case 51724: // Sap R4
+    case 10955: // Priest - Shackle Undead
+    case 9485:
+    case 9484:
+    case 49203: // DK - Hungering Cold
+    case 51514: // Shaman - Hex
+    case 42950: // Mage - Dragon Breath
+    case 42949:
+    case 33043:
+    case 33042:
+    case 33041:
+    case 31661: // Dragon's Breath R1
+    case 12826: // Mage - Polymorph
+    case 12825:
+    case 12824:
+    case 118:  // Polymorph R1
+    case 6358: // Warlock - Pet - Succubus - Seduction
+    case 2637: // Druid - Hibernate
+    case 18657:
+    case 18658:
+        return delayForDisorients;
+    case 36554: // Rogue - Shadowstep
+    case 25046: // Racial - Blood Elf
+    case 47486: // Warrior Mortal Strike
+    case 49050: // Aimed Shot
+    case 59159: // Thunderstorm
+    case 49576: // DK - Death Grip
+    case 45334: // Druid - Feral charge - Bear
+    case 49376: // Druid - Feral charge - Cat
+        return delayForInstantSpells;
+    case 6789: // Warlock - DeathCoil
+    case 17925:
+    case 17926:
+    case 27223:
+    case 47859:
+    case 47860: // Death Coil R6
+        return delayForHorrors;
+    case 23694: // Warrior - Improved Hamstring
+    case 64695: // Shaman - Talent - Earth's Grasp root
+    case 12494: // Mage - Talent - Frostbite
+    case 122:   // Mage - Frostnova
+    case 865:
+    case 6131:
+    case 10230:
+    case 27088:
+    case 42917: // Frost Nova R6
+    case 33395: // Mage - Pet - Freeze
+        //case 19185: // Entrapment
+        //case 64803: // Entrapment
+        //case 64804: // Entrapment
+    case 339:   // Druid - Entangling roots
+    case 1062:
+    case 5195:
+    case 5196:
+    case 9852:
+    case 9853:
+    case 26989:
+    case 53308: // Entangling Roots R8
+        return delayForRoots;
+    case 710: // Warlock - Banish
+    case 18647:
+    case 33786: // Druid - Cyclone
+    case 605: // Priest - Mind Control
+        return delayForBanishes;
+    case 3355: // Freezing trap
+    case 14308:
+    case 14309: // Freezing Trap Effect R3
+        return 0;
+
+    default:
+        // Other spells with mechanics
+        for (uint8 i = 0; i < CCDArraySize; ++i)
+            if (_spell->HasAura(auraWithCCD[i]))
+                return auraCCDelay[i];
+        break;
+    }
+
+    return 0;
 }
 
 SpellCastResult Spell::CheckPetCast(Unit* target)

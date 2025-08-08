@@ -690,6 +690,48 @@ void InstanceScript::DoRemoveAurasDueToSpellOnPlayers(uint32 spell)
     });
 }
 
+// Remove Auras e CDs due to Spell on all players in instance (Para resetar CDs e BL ao matar bosses)
+void InstanceScript::RemoveAurasAndResetCooldownsOnPlayers(uint32 spell)
+{
+    if (sWorld->getIntConfig(CONFIG_RESET_CDS_ON_BOSS_KILL) == 1)
+    {
+        Map::PlayerList const& PlayerList = instance->GetPlayers();
+        if (!PlayerList.IsEmpty())
+        {
+            for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
+            {
+                if (Player* player = itr->GetSource())
+                {
+                    player->RemoveAurasDueToSpell(spell);
+
+                    player->ResetPlayersRaidSpellCooldowns();
+                    player->RemoveAurasDueToSpell(57723); // Sated
+                    player->RemoveAurasDueToSpell(57724); // Exhaustion
+                    player->RemoveAurasDueToSpell(41425); // Hypothermia
+                    player->RemoveAurasDueToSpell(66233); // Ardent Defender (Prot paladin)
+                    player->RemoveAurasDueToSpell(61988); // Server Side Forbearance
+                    player->RemoveAurasDueToSpell(61987); // Avenging Wrath Marker (server side forbearance) - pala
+                    player->RemoveAurasDueToSpell(79500); // Custom - Cheated Death (Custom visual only) - Rogue
+                    player->RemoveAurasDueToSpell(79501); // Custom - Forbearance Custom (visual only) - pala
+                    player->RemoveAurasDueToSpell(79502); // Custom - Nature's Swiftness (Custom visual only) - Druid
+                    player->RemoveAurasDueToSpell(79503); // Custom - Reincarnation - Shaman
+
+
+                    if (Pet* pet = player->GetPet())
+                    {
+                        if (pet && pet->IsInWorld())
+                        {
+                            pet->RemoveAurasDueToSpell(57723); // Sated
+                            pet->RemoveAurasDueToSpell(57724); // Exhaustion
+                            pet->RemoveAurasDueToSpell(55711); // Heart of the Phoenix (8min reincarnation)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Cast spell on all players in instance
 void InstanceScript::DoCastSpellOnPlayers(uint32 spell)
 {

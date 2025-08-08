@@ -3591,6 +3591,32 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
         }
 }
 
+void Player::ResetPlayersRaidSpellCooldowns(bool removeActivePetCooldowns)
+{
+    uint32 infTime = GameTime::GetGameTimeMS().count() + infinityCooldownDelayCheck;
+    if (!m_spellCooldowns.empty())
+    {
+        for (SpellCooldowns::const_iterator itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end(); ++itr)
+            if (itr->second.end < infTime)
+                SendClearCooldown(itr->first, this);
+
+        m_spellCooldowns.clear();
+    }
+
+    // pet cooldowns
+    if (removeActivePetCooldowns)
+        if (Pet* pet = GetPet())
+        {
+            if (pet && pet->IsInWorld())
+            {
+                for (auto const& cooldown : pet->m_CreatureSpellCooldowns)
+                    SendClearCooldown(cooldown.first, pet);
+
+                pet->m_CreatureSpellCooldowns.clear();
+            }
+        }
+}
+
 void Player::RemoveAllSpellCooldown()
 {
     uint32 infTime = GameTime::GetGameTimeMS().count() + infinityCooldownDelayCheck;

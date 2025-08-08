@@ -299,6 +299,8 @@ public:
                 pInstance->SetData(TYPE_ASSEMBLY, DONE);
                 me->CastSpell(me, 65195, true); // credit
                 Talk(SAY_STEELBREAKER_ENCOUNTER_DEFEATED);
+
+                //pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
             }
             else
             {

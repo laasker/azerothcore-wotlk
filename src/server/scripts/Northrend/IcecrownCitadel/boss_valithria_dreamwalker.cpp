@@ -352,6 +352,8 @@ public:
                 _events.ScheduleEvent(EVENT_DREAM_SLIP, 3500ms);
                 _instance->SetBossState(DATA_VALITHRIA_DREAMWALKER, DONE);
 
+                _instance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
+
                 if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_TRIGGER)))
                     trigger->AI()->EnterEvadeMode();
                 if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_LICH_KING)))

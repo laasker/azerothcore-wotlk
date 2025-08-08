@@ -220,6 +220,7 @@ public:
             if (!me->IsAlive())
                 if (pInstance)
                     pInstance->SetData(TYPE_HODIR, DONE);
+                    //pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
         }
 
         InstanceScript* pInstance;

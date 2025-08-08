@@ -288,6 +288,8 @@ public:
             if (!me->IsAlive())
                 if (pInstance)
                     pInstance->SetData(TYPE_MIMIRON, DONE);
+                    //pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
+
             bIsEvading = false;
         }
 
@@ -802,6 +804,8 @@ public:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
                     if (pInstance)
                         pInstance->SetData(TYPE_MIMIRON, DONE);
+                        //pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
+
                     // spawn chest
                     if (uint32 chestId = (hardmode ? RAID_MODE(GO_MIMIRON_CHEST_HARD, GO_MIMIRON_CHEST_HERO_HARD) : RAID_MODE(GO_MIMIRON_CHEST, GO_MIMIRON_CHEST_HERO)))
                     {

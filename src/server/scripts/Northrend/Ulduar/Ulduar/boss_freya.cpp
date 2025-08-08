@@ -358,6 +358,8 @@ public:
                     {
                         me->CastSpell(me, 65074, true); // credit
                         m_pInstance->SetData(TYPE_FREYA, DONE);
+
+                        //m_pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
                     }
 
                     scheduler.Schedule(14s, [this](TaskContext /*context*/)

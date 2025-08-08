@@ -600,6 +600,8 @@ public:
                     {
                         me->CastSpell(me, 64985, true); // credit
                         m_pInstance->SetData(TYPE_THORIM, DONE);
+
+                        //m_pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
                     }
                 }
             }

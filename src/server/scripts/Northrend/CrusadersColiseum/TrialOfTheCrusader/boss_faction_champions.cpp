@@ -128,6 +128,8 @@ struct boss_faction_championsAI : public ScriptedAI
     {
         if (pInstance && mAIType != AI_PET)
             pInstance->SetData(TYPE_FACTION_CHAMPIONS, DONE);
+
+        pInstance->RemoveAurasAndResetCooldownsOnPlayers(25771); // Forbearance (ja ta incluido Sated, Exhaustion, Hypothermia etc)
     }
 
     void KilledUnit(Unit*  /*who*/) override

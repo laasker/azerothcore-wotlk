@@ -210,6 +210,7 @@ enum PlayerHook
     PLAYERHOOK_CAN_RESURRECT,
     PLAYERHOOK_ON_CAN_GIVE_LEVEL,
     PLAYERHOOK_ON_SEND_LIST_INVENTORY,
+    PLAYERHOOK_ON_UNEQUIP,
     PLAYERHOOK_END
 };
 
@@ -405,6 +406,9 @@ public:
 
     // After an item has been equipped
     virtual void OnPlayerEquip(Player* /*player*/, Item* /*it*/, uint8 /*bag*/, uint8 /*slot*/, bool /*update*/) { }
+
+    // After an item has been unequipped
+    virtual void OnPlayerUnEquip(Player* /*player*/, Item* /*it*/, uint8 /*slot*/, bool /*update*/) {}
 
     // After player enters queue for BG
     virtual void OnPlayerJoinBG(Player* /*player*/) { }

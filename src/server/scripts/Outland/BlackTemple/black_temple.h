@@ -110,8 +110,8 @@ enum MiscIds
     SPELL_WYVERN_STING              = 24336,
     SPELL_SHADOW_INFERNO_DAMAGE     = 39646,
     SPELL_CHAOTIC_CHARGE            = 41033,
-    SPELL_DEMENTIA1                 = 41406,
-    SPELL_DEMENTIA2                 = 41409,
+    SPELL_DEMENTIA1                 = 41409, //
+    SPELL_DEMENTIA2                 = 41409, //
     SPELL_SUMMON_SHADOWFIENDS       = 41159
 };
 

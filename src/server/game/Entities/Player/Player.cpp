@@ -142,7 +142,7 @@ enum CharacterCustomizeFlags
     CHAR_CUSTOMIZE_FLAG_RACE            = 0x00100000        // name, gender, race, etc...
 };
 
-static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 30, 60, 120 };
+static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 15, 30, 60 }; //30, 60, 120 };
 
 // we can disable this warning for this since it only
 // causes undefined behavior when passed to the base class constructor

@@ -15285,6 +15285,52 @@ void Player::ActivateSpec(uint8 spec)
     sScriptMgr->OnPlayerAfterSpecSlotChanged(this, GetActiveSpec());
 }
 
+void Player::ReloadActionBar()
+{
+    // interrupt currently casted spell just in case
+    if (IsNonMeleeSpellCast(false))
+        InterruptNonMeleeSpells(false);
+
+    // remove pet, it will be resummoned later
+    if (Pet* pet = GetPet())
+        RemovePet(pet, PET_SAVE_NOT_IN_SLOT);
+
+    // remove other summoned units and clear reactives
+    ClearAllReactives();
+    UnsummonAllTotems();
+    RemoveAllControlled();
+
+    // Remove talented single target auras at other targets
+    AuraList& scAuras = GetSingleCastAuras();
+    for (AuraList::iterator iter = scAuras.begin(); iter != scAuras.end();)
+    {
+        Aura* aura = *iter;
+        if (!HasActiveSpell(aura->GetId()) && !HasTalent(aura->GetId(), GetActiveSpec()) && !aura->GetCastItemGUID())
+        {
+            aura->Remove();
+            iter = scAuras.begin();
+        }
+        else
+            ++iter;
+    }
+
+    // refresh ActionBar (load them asynchronously)
+    {
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_ACTIONS_SPEC);
+        stmt->SetData(0, GetGUID().GetCounter());
+        stmt->SetData(1, m_activeSpec);
+        WorldSession* mySess = GetSession();
+        mySess->GetQueryProcessor().AddCallback(CharacterDatabase.AsyncQuery(stmt)
+            .WithPreparedCallback([mySess](PreparedQueryResult result)
+            {
+                // safe callback, we can't pass this pointer directly
+                // in case player logs out before db response (player would be deleted in that case)
+                if (Player* thisPlayer = mySess->GetPlayer())
+                    thisPlayer->LoadActions(result);
+            }));
+    }
+}
+
 void Player::LoadActions(PreparedQueryResult result)
 {
     if (result)

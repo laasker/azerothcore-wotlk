@@ -2326,13 +2326,17 @@ void WorldSession::HandleCharFactionOrRaceChangeCallback(std::shared_ptr<Charact
 
             if (newTeam == TEAM_ALLIANCE)
             {
-                loc.WorldRelocate(MAP_EASTERN_KINGDOMS, -8867.68f, 673.373f, 97.9034f, 0.0f);
-                zoneId = AREA_STORMWIND_CITY;
+                //loc.WorldRelocate(MAP_EASTERN_KINGDOMS, -8867.68f, 673.373f, 97.9034f, 0.0f);
+                loc.WorldRelocate(MAP_NORTHREND, 2944.24f, -2667.01f, 93.21f, 3.0f); // Mall (Grizzly Hills - Voldrune)
+                //zoneId = AREA_STORMWIND_CITY;
+                zoneId = AREA_GRIZZLY_HILLS;
             }
             else
             {
-                loc.WorldRelocate(MAP_KALIMDOR, 1633.33f, -4439.11f, 15.7588f, 0.0f);
-                zoneId = AREA_ORGRIMMAR;
+                //loc.WorldRelocate(MAP_KALIMDOR, 1633.33f, -4439.11f, 15.7588f, 0.0f);
+                loc.WorldRelocate(MAP_NORTHREND, 2944.24f, -2667.01f, 93.21f, 3.0f); // Mall (Grizzly Hills - Voldrune)
+                //zoneId = AREA_ORGRIMMAR;
+                zoneId = AREA_GRIZZLY_HILLS;
             }
 
             stmt->SetData(1, loc.GetMapId());

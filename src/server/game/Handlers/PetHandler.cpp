@@ -172,6 +172,10 @@ void WorldSession::HandlePetActionHelper(Unit* pet, ObjectGuid guid1, uint32 spe
                             pet->GetMotionMaster()->MoveIdle();
                         }
 
+                        pet->AttackStop();
+                        pet->InterruptNonMeleeSpells(false);
+                        pet->ClearInPetCombat();
+
                         charmInfo->SetCommandState(COMMAND_STAY);
                         charmInfo->SetIsCommandAttack(false);
                         charmInfo->SetIsCommandFollow(false);

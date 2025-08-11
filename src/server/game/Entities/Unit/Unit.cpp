@@ -10465,8 +10465,8 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
     {
         // should not let player enter combat by right clicking target - doesn't helps
         SetInCombatWith(victim);
-        if (victim->IsPlayer())
-            victim->SetInCombatWith(this);
+        //if (victim->IsPlayer()) // fix pet shaman (elemental) dando combat insta
+        //    victim->SetInCombatWith(this);
 
         AddThreat(victim, 0.0f);
 

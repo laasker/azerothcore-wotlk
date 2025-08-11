@@ -3079,7 +3079,8 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
                 return SPELL_MISS_EVADE;
         }
 
-        if (m_caster->_IsValidAttackTarget(unit, m_spellInfo) && /*Intervene Trigger*/ m_spellInfo->Id != 59667)
+        //if (m_caster->_IsValidAttackTarget(unit, m_spellInfo) && /*Intervene Trigger*/ m_spellInfo->Id != 59667)
+        if (m_caster->_IsValidAttackTarget(unit, m_spellInfo) && m_spellInfo->Id != 59667/*Intervene Trigger*/ && m_spellInfo->Id != 1725/*Distract(vs mage inv)*/ && m_spellInfo->Id != 71904) // Chaos bane nao quebra invis mage
         {
             unit->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_HITBYSPELL);
         }
@@ -3139,7 +3140,14 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
         }
     }
 
-    if (m_caster != unit && m_caster->IsHostileTo(unit) && !m_spellInfo->IsPositive() && !m_triggeredByAuraSpell && !m_spellInfo->HasAttribute(SPELL_ATTR0_CU_DONT_BREAK_STEALTH))
+    // Chaos Bane(shadowmourne proc) vs Stealth
+    if (m_caster->IsPlayer() && unit->IsPlayer() && m_spellInfo->Id == 71904)
+    {
+        if ((unit->HasAura/*Prowl*/(5215) || unit->HasAura/*Stealth*/(1784) || unit->HasAura/*Shadowmeld*/(58984) ||
+            unit->HasAura/*Invisibility*/(32612) || unit->HasAura/*Invisibility Potion*/(11392) || unit->HasAura/*Lesser Inv*/(3680)))
+            return SPELL_MISS_MISS;
+    }
+    if (m_caster != unit && m_caster->IsHostileTo(unit) && !m_spellInfo->IsPositive() && !m_triggeredByAuraSpell && !m_spellInfo->HasAttribute(SPELL_ATTR0_CU_DONT_BREAK_STEALTH) && m_spellInfo->Id != 71904)
     {
         unit->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
     }

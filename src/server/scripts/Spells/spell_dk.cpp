@@ -108,6 +108,7 @@ class spell_dk_wandering_plague : public SpellScript
             SPELL_AURA_MOD_STUN,
             SPELL_AURA_MOD_ROOT,
             SPELL_AURA_TRANSFORM,
+            SPELL_AURA_MOD_STEALTH,
             SPELL_AURA_NONE
         };
 

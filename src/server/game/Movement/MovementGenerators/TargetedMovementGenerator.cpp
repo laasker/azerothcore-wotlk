@@ -360,13 +360,28 @@ static Optional<float> GetVelocity(Unit* owner, Unit* target, G3D::Vector3 const
 
         UnitMoveType moveType = Movement::SelectSpeedType(moveFlags);
         speed = target->GetSpeed(moveType);
+
         if (playerPet)
         {
-            float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 2.f);
-            if (distance > 0.f)
+            Player* playerOwner = owner->GetCharmerOrOwnerPlayerOrPlayerItself();
+            bool isInDuel = playerOwner && playerOwner->duel && (playerOwner->duel->State == DUEL_STATE_CHALLENGED || playerOwner->duel->State == DUEL_STATE_COUNTDOWN || playerOwner->duel->State == DUEL_STATE_IN_PROGRESS);
+            if (isInDuel || owner->GetMap()->IsBattleArena()) // Arena/Duel
             {
-                float multiplier = 1.f + (distance / 10.f);
-                *speed *= multiplier;
+                float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 0.11f);
+                if (distance > 0.f)
+                {
+                    float multiplier = 0.45f + (distance / 20.f);
+                    *speed *= multiplier;
+                }
+            }
+            else // BGs/World
+            {
+                float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 2.f);
+                if (distance > 0.f)
+                {
+                    float multiplier = 1.f + (distance / 10.f);
+                    *speed *= multiplier;
+                }
             }
         }
     }

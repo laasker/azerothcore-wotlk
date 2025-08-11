@@ -80,6 +80,17 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
                 // Screams of the Past
                 else if (spellproto->Id == 7074)
                     return DIMINISHING_NONE;
+
+                // Mortal Wound (Felguard lock demo) - Limit to 10 seconds in PvP
+                else if (spellproto->Id == 25646)
+                    return DIMINISHING_LIMITONLY;
+                // Snake Trap Mind Numbing Poison (12s > 10s in PvP)
+                else if (spellproto->Id == 25810)
+                    return DIMINISHING_LIMITONLY;
+                // Snake Trap Crippling Poison (12s > 10s in PvP)
+                else if (spellproto->Id == 30981)
+                    return DIMINISHING_LIMITONLY;
+
                 break;
             }
         // Event spells
@@ -102,6 +113,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
                 // Dragon's Breath
                 else if (spellproto->SpellFamilyFlags[0] & 0x800000)
                     return DIMINISHING_DRAGONS_BREATH;
+                // Slow - limit duration to 10s in PvP
+                else if (spellproto->Id == 31589)
+                    return DIMINISHING_LIMITONLY;
                 break;
             }
         case SPELLFAMILY_WARRIOR:
@@ -125,6 +139,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
                 // Seduction
                 else if (spellproto->SpellFamilyFlags[1] & 0x10000000)
                     return DIMINISHING_FEAR;
+                // Unstable Affliction - Silence sem DR
+                else if (spellproto->Id == 31117)
+                    return DIMINISHING_NONE;
                 break;
             }
         case SPELLFAMILY_DRUID:
@@ -160,6 +177,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
                     return DIMINISHING_OPENING_STUN;
                 // Crippling poison - Limit to 10 seconds in PvP (No SpellFamilyFlags)
                 else if (spellproto->SpellIconID == 163)
+                    return DIMINISHING_LIMITONLY;
+                // Wound Poison - Limit to 10 seconds in PvP 
+                else if (spellproto->SpellIconID == 1496)
                     return DIMINISHING_LIMITONLY;
                 break;
             }

@@ -6046,7 +6046,7 @@ SpellCastResult Spell::CheckCast(bool strict)
     }
     // Spell casted only on battleground
     if (m_spellInfo->HasAttribute(SPELL_ATTR3_ONLY_BATTLEGROUNDS) &&  m_caster->IsPlayer())
-        if (!m_caster->ToPlayer()->InBattleground())
+        if (!m_caster->ToPlayer()->InBattleground() && !m_caster->ToPlayer()->InArena())
             return SPELL_FAILED_ONLY_BATTLEGROUNDS;
 
     // do not allow spells to be cast in arenas

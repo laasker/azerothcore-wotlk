@@ -3147,6 +3147,20 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
             unit->HasAura/*Invisibility*/(32612) || unit->HasAura/*Invisibility Potion*/(11392) || unit->HasAura/*Lesser Inv*/(3680)))
             return SPELL_MISS_MISS;
     }
+    // Cloak of Shadows 100% miss
+    if (m_caster->IsPlayer() && unit->IsPlayer() && unit->HasAura(31224) && m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC)
+    {
+        if (!(m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->SpellIconID == 3178)) // Chaos Bolt
+        {
+            if (!((m_spellInfo->AttributesEx3 & SPELL_ATTR3_ALWAYS_HIT) && (m_spellInfo->AttributesEx4 & SPELL_ATTR4_NO_CAST_LOG)))
+                return SPELL_MISS_MISS; // default o CoS da miss, mas no retail se n me engano é resist
+                //SPELL_MISS_MISS
+                //SPELL_MISS_RESIST
+                //SPELL_MISS_IMMUNE
+                //SPELL_MISS_EVADE
+        }
+    }
+
     if (m_caster != unit && m_caster->IsHostileTo(unit) && !m_spellInfo->IsPositive() && !m_triggeredByAuraSpell && !m_spellInfo->HasAttribute(SPELL_ATTR0_CU_DONT_BREAK_STEALTH) && m_spellInfo->Id != 71904)
     {
         unit->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);

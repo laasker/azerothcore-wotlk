@@ -581,6 +581,7 @@ void WorldConfig::BuildConfigCache()
 
     // Customs
     SetConfigValue<uint32>(CONFIG_RESET_CDS_ON_BOSS_KILL, "Reset.CDs.OnBossKill", 1);
+    SetConfigValue<uint32>(CONFIG_ENABLE_FAKE_WHO_ON_ARENA, "Arena.FakeWho", 1);
 
 
     SetConfigValue<uint32>(CONFIG_BIRTHDAY_TIME, "BirthdayTime", 1222964635);

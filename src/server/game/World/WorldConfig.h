@@ -278,6 +278,7 @@ enum ServerConfigs
 
     // Customs
     CONFIG_RESET_CDS_ON_BOSS_KILL,
+    CONFIG_ENABLE_FAKE_WHO_ON_ARENA,
 
 
     CONFIG_ARENA_PREP_TIME,

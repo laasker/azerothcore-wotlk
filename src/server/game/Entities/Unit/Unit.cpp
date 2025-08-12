@@ -7302,6 +7302,25 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
         case SPELLFAMILY_WARRIOR:
             {
+                // Custom passive/proc que aumenta duração do Rend cada vez que usa MS
+                if (dummySpell->Id == 83266)
+                {
+                    if (!target)
+                        return false;
+
+                    // try to find Rend on the target
+                    if (AuraEffect const* aurEff = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARRIOR, 0x20, 0x0, 0x0, GetGUID()))
+                    {
+                        Aura* rend = aurEff->GetBase();
+                        int32 extraTime = /*3000*/ 1 * aurEff->GetAmplitude(); // Aumenta a duração. 1 = quantidade de amplitude, 3s no caso do rend. (nao sei se stacka com Modifiers)
+                        rend->SetMaxDuration(rend->GetMaxDuration() + extraTime);
+                        rend->SetDuration(rend->GetDuration() + extraTime);
+
+                        return true;
+                    }
+
+                    return false;
+                }
                 // Second Wind
                 if (dummySpell->SpellIconID == 1697)
                 {

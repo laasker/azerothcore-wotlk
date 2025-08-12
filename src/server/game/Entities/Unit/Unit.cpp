@@ -2481,6 +2481,21 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited)
                 if (!caster->IsWithinDist(victim, splitSpellInfo->GetMaxRange(splitSpellInfo->IsPositive(), caster)))
                     continue;
 
+            // dano recebido do HoS / Divine Sac quebra Hungering Cold (quando ta com Absorb)
+            switch ((*itr)->GetId())
+            {
+                case 6940:  // Hand of Sacrifice
+                case 64205: // Divine Sacrifice
+                    if (caster->HasAura(51209)) // Hungering Cold
+                    {
+                        caster->RemoveAura(51209);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
             uint32 splitDamage = CalculatePct(dmgInfo.GetDamage(), (*itr)->GetAmount());
             SpellSchoolMask splitSchoolMask  = schoolMask;
 

@@ -7363,7 +7363,7 @@ SpellCastResult Spell::CheckRange(bool strict)
     {
         if (target != m_caster)
         {
-            // Xinef: Spells with 5yd range can hit target 9yd away?
+            // Xinef: Spells with 5yd range can hit target 9yd away? 
             if (range_type == SPELL_RANGE_MELEE)
             {
                 float real_max_range = max_range;

@@ -1520,6 +1520,7 @@ void Spell::EffectHeal(SpellEffIndex effIndex)
         // Swiftmend - consumes Regrowth or Rejuvenation
         else if (m_spellInfo->TargetAuraState == AURA_STATE_SWIFTMEND && unitTarget->HasAuraState(AURA_STATE_SWIFTMEND, m_spellInfo, m_caster))
         {
+            /*
             Unit::AuraEffectList const& RejorRegr = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_HEAL);
             // find most short by duration
             AuraEffect* forcedTargetAura = nullptr;
@@ -1541,6 +1542,37 @@ void Spell::EffectHeal(SpellEffIndex effIndex)
 
             if (forcedTargetAura)
                 targetAura = forcedTargetAura;
+            //*/
+            Unit::AuraEffectList const& RejorRegr = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_HEAL);
+
+            AuraEffect* rejuvenationAura = nullptr;
+            AuraEffect* regrowthAura = nullptr;
+
+            for (Unit::AuraEffectList::const_iterator i = RejorRegr.begin(); i != RejorRegr.end(); ++i)
+            {
+                if ((*i)->GetSpellInfo()->SpellFamilyName == SPELLFAMILY_DRUID
+                    && (*i)->GetSpellInfo()->SpellFamilyFlags[0] & 0x50)
+                {
+                    if ((*i)->GetSpellInfo()->SpellFamilyFlags[0] & 0x10) // Rejuvenation
+                    {
+                        rejuvenationAura = *i;
+                        break;
+                    }
+                    else if ((*i)->GetSpellInfo()->SpellFamilyFlags[0] & 0x40) // Regrowth
+                    {
+                        regrowthAura = *i;
+                    }
+                }
+            }
+            AuraEffect* targetAura = nullptr;
+            if (rejuvenationAura)
+            {
+                targetAura = rejuvenationAura;
+            }
+            else if (regrowthAura)
+            {
+                targetAura = regrowthAura;
+            }
 
             if (!targetAura)
             {

@@ -1792,8 +1792,9 @@ void Battleground::HandleKillPlayer(Player* victim, Player* killer)
     {
         // To be able to remove insignia -- ONLY IN Battlegrounds
         victim->SetUnitFlag(UNIT_FLAG_SKINNABLE);
-        RewardXPAtKill(killer, victim);
+        //RewardXPAtKill(killer, victim);
     }
+    RewardXPAtKill(killer, victim);
 }
 
 TeamId Battleground::GetOtherTeamId(TeamId teamId)

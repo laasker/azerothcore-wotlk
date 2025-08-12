@@ -9179,6 +9179,42 @@ void Spell::TriggerGlobalCooldown()
             m_spellInfo->DmgClass != SPELL_DAMAGE_CLASS_RANGED && !m_spellInfo->HasAttribute(SPELL_ATTR0_USES_RANGED_SLOT) && !m_spellInfo->HasAttribute(SPELL_ATTR0_IS_ABILITY))
         {
             gcd = int32(float(gcd) * m_caster->GetFloatValue(UNIT_MOD_CAST_SPEED));
+
+            // GCD vs Tongues/Mind Numbing/Fire Breath - nao funciona, parece que o problema é no client
+            //float baseMod = 1.0f;
+            //float hasteMod = m_caster->GetFloatValue(UNIT_MOD_CAST_SPEED);
+            //if (m_caster->IsPlayer())
+            //{
+            //    auto hasteAuras = m_caster->GetAuraEffectsByType(SPELL_AURA_HASTE_SPELLS);
+            //    if (!hasteAuras.empty())
+            //    {
+            //        if (Player* player = m_caster->ToPlayer())
+            //        {
+            //            for (AuraEffect* auraEffect : hasteAuras)
+            //            {
+            //                if (auraEffect->GetAmount() < 0) // Se for um slow
+            //                {
+            //                    // Slow aumenta o tempo, baseMod deve ser o fator de lentidão
+            //                    float slowFactor = 1.0f + std::abs(auraEffect->GetAmount()) / 100.0f; // e.g., 1.3 para -30%
+            //                    baseMod *= slowFactor;
+
+            //                    player->GetSession()->SendAreaTriggerMessage("Compensando slow: {}% (fator: {:.4f}, baseMod: {:.4f})",
+            //                        auraEffect->GetAmount(), slowFactor, baseMod);
+            //                }
+            //            }
+            //            baseMod *= 0.80f; // Aplica redução de 20% no GCD se houver auras de haste/slow
+            //            player->GetSession()->SendAreaTriggerMessage("Aplicando redução de 25% no GCD (baseMod ajustado: {:.4f})",
+            //                baseMod);
+            //        }
+            //    }
+            //}
+            //// Aplica o modificador base (que compensa os slows) e o modificador de haste normal
+            //gcd = int32(float(gcd) * hasteMod / baseMod);
+            //if (Player* player = m_caster->ToPlayer())
+            //{
+            //    player->GetSession()->SendAreaTriggerMessage("GCD Final: {} (hasteMod: {:.4f} / baseMod: {:.4f})",
+            //        gcd, hasteMod, baseMod);
+            //}
         }
 
         if (gcd < MIN_GCD)

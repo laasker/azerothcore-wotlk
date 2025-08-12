@@ -658,6 +658,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             }
 
             sScriptMgr->OnArenaStart(this);
+            //sScriptMgr->OnBattlegroundStart(this);
         }
         else
         {

@@ -1476,6 +1476,15 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         caster->CastCustomSpell(target, 64801, &basepoints0, nullptr, nullptr, true, nullptr, GetEffect(0));
                     }
                 }
+                //if (GetSpellInfo()->Id == 48451) // lifebloom
+                //{
+                //    if (caster->HasAura(83078)) // example
+                //    {
+                //        m_stackAmount = 2;
+                //        //m_procCharges = 0;
+                //    }
+                //    break;
+                //}
                 break;
             case SPELLFAMILY_PRIEST:
                 if (!caster)

@@ -299,6 +299,7 @@ void WorldSession::SendPetitionQueryOpcode(ObjectGuid petitionguid)
     }
     else
     {
+        int32 needed = sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS);
         data << uint32(type - 1);
         data << uint32(type - 1);
         data << uint32(type);                               // bypass client - side limitation, a different value is needed here for each petition
@@ -723,7 +724,8 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket& recvData)
     if (type == GUILD_CHARTER_TYPE)
         requiredSignatures = sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS);
     else
-        requiredSignatures = type - 1;
+        //requiredSignatures = type - 1;
+        requiredSignatures = sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS);
 
     // Notify player if signatures are missing
     if (signs < requiredSignatures)

@@ -5671,7 +5671,7 @@ Aura* Unit::GetAuraOfRankedSpell(uint32 spellId, ObjectGuid casterGUID, ObjectGu
     return aurApp ? aurApp->GetBase() : nullptr;
 }
 
-void Unit::GetDispellableAuraList(Unit* caster, uint32 dispelMask, DispelChargesList& dispelList, SpellInfo const* dispelSpell)
+void Unit::GetDispellableAuraList(Unit* caster, uint32 dispelMask, DispelChargesList& dispelList, SpellInfo const* dispelSpell, bool checkPositiveWhenFriendly)
 {
     // we should not be able to dispel diseases if the target is affected by unholy blight
     if (dispelMask & (1 << DISPEL_DISEASE) && HasAura(50536))
@@ -5713,7 +5713,8 @@ void Unit::GetDispellableAuraList(Unit* caster, uint32 dispelMask, DispelCharges
             {
                 // do not remove positive auras if friendly target
                 //               negative auras if non-friendly target
-                if (itr->second->IsPositive() == positive)
+                //if (itr->second->IsPositive() == positive)
+                if (checkPositiveWhenFriendly && itr->second->IsPositive() == positive)
                     continue;
             }
 

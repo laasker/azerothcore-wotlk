@@ -7064,6 +7064,49 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                             CastSpell(target, RandomSpells[rand_spell], true, castItem, triggeredByAura, originalCaster);
                             break;
                         }
+                    case 83094: // Deathbringer's Will PvP Custom
+                        {
+                            if (!IsPlayer() || HasSpellCooldown(83095))
+                                return false;
+
+                            AddSpellCooldown(83095, 0, cooldown);
+
+                            std::vector<uint32> RandomSpells;
+                            switch (getClass())
+                            {
+                                case CLASS_WARRIOR:
+                                    RandomSpells.push_back(83095);
+                                    RandomSpells.push_back(83098);
+                                case CLASS_PALADIN:
+                                case CLASS_DEATH_KNIGHT:
+                                    RandomSpells.push_back(83095);
+                                    RandomSpells.push_back(83099);
+                                    break;
+                                case CLASS_SHAMAN:
+                                    RandomSpells.push_back(83096);
+                                    RandomSpells.push_back(83099);
+                                case CLASS_ROGUE:
+                                    RandomSpells.push_back(83097);
+                                    RandomSpells.push_back(83096);
+                                    break;
+                                case CLASS_DRUID:
+                                    RandomSpells.push_back(83095);
+                                    RandomSpells.push_back(83096);
+                                    break;
+                                case CLASS_HUNTER:
+                                    RandomSpells.push_back(83097);
+                                    RandomSpells.push_back(83096);
+                                    break;
+                                default:
+                                    return false;
+                            }
+                            if (RandomSpells.empty()) // shouldn't happen
+                                return false;
+
+                            uint8 rand_spell = irand(0, (RandomSpells.size() - 1));
+                            CastSpell(target, RandomSpells[rand_spell], true, castItem, triggeredByAura, originalCaster);
+                            break;
+                        }
                     // Freya, Petrified Bark
                     case 62933:
                     case 62337:
@@ -9094,6 +9137,18 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             if (GetStat(STAT_STRENGTH) > stat) { trigger_spell_id = 67773; stat = GetStat(STAT_STRENGTH); }
                             // agility
                             if (GetStat(STAT_AGILITY)  > stat) { trigger_spell_id = 67772;                               }
+                            break;
+                        }
+                    case 83100:             // Death's Choice PvP (Custom)
+                        {
+                            if (!damage)
+                                return false;
+
+                            float stat = 0.0f;
+                            // strength
+                            if (GetStat(STAT_STRENGTH) > stat) { trigger_spell_id = 83112; stat = GetStat(STAT_STRENGTH); }
+                            // agility
+                            if (GetStat(STAT_AGILITY) > stat) { trigger_spell_id = 83113;                               }
                             break;
                         }
                     case 27522: // Mana Drain Trigger

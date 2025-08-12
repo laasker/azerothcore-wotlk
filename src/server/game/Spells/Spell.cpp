@@ -5954,11 +5954,19 @@ SpellCastResult Spell::CheckCast(bool strict)
 
         if (target != m_caster)
         {
-            // Must be behind the target
+            // Must be behind the target (Shred/Ambush/Backstab etc)
             if (m_spellInfo->HasAttribute(SPELL_ATTR0_CU_REQ_CASTER_BEHIND_TARGET) && target->HasInArc(static_cast<float>(M_PI), m_caster))
                 return SPELL_FAILED_NOT_BEHIND;
 
             // Target must be facing you
+            
+            // Futuro Glyph ou algo do tipo para nao precisar bater nas costas com Shred etc, porém tem que remover a opção de nao dar dodge/parry/block
+            //if (!m_caster->HasSpell(83273))
+            //{
+            //    return SPELL_FAILED_NOT_BEHIND;
+            //}
+
+            // Target must be facing you - Glyph of Gouge?
             if (m_spellInfo->HasAttribute(SPELL_ATTR0_CU_REQ_TARGET_FACING_CASTER) && !target->HasInArc(static_cast<float>(M_PI), m_caster))
                 return SPELL_FAILED_NOT_INFRONT;
 

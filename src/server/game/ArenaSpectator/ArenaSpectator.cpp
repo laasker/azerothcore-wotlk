@@ -86,14 +86,14 @@ bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::s
     if (player->IsInCombat())
         errors.push_back("Can't be in combat.");
 
-    if (player->IsUsingLfg())
-        errors.push_back("Can't spectate while using LFG system.");
+    //if (player->IsUsingLfg())
+    //    errors.push_back("Can't spectate while using LFG system.");
 
-    if (player->InBattlegroundQueue())
-        errors.push_back("Can't be queued for arena or bg.");
+    //if (player->InBattlegroundQueue())
+    //    errors.push_back("Can't be queued for arena or bg.");
 
-    if (player->GetGroup())
-        errors.push_back("Can't be in a group.");
+    //if (player->GetGroup())
+    //    errors.push_back("Can't be in a group.");
 
     if (player->HasUnitState(UNIT_STATE_ISOLATED))
         errors.push_back("Can't be isolated.");
@@ -101,17 +101,17 @@ bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::s
     if (player->m_mover != player)
         errors.push_back("You must control yourself.");
 
-    if (player->IsInFlight())
+    if (player->IsInFlight()) 
         errors.push_back("Can't be in flight.");
 
-    if (player->IsMounted())
-        errors.push_back("Dismount before spectating.");
+    //if (player->IsMounted())
+    //    errors.push_back("Dismount before spectating.");
 
     if (!player->IsAlive())
         errors.push_back("Must be alive.");
 
-    if (!player->m_Controlled.empty())
-        errors.push_back("Can't be controlling creatures.");
+    //if (!player->m_Controlled.empty())
+    //    errors.push_back("Can't be controlling creatures.");
 
     const Unit::VisibleAuraMap* va = player->GetVisibleAuras();
     for (auto itr = va->begin(); itr != va->end(); ++itr)
@@ -128,6 +128,17 @@ bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::s
                     case 25771: // forbearance
                     case 15007: // resurrection sickness
                     case 24755: // Tricked or Treated (z eventu)
+
+                    case 61987: // Server Side Forbearance (Avenging Wrath Marker) 
+                    case 61988: // Server Side Forbearance (Divine Shield Exclude Aura) 
+                    case 6788:  // Weakened Soul 
+                    case 41425: // Hipothermia 
+                    case 66233: // Ardent Defender
+                    case 11196: // Recently Bandaged
+                    case 79500: // (Custom) Cheat Death debuff
+                    case 79501: // (Custom) Forbearance debuff
+                    case 79502: // (Custom) Nature's Guardian debuff
+                    case 79503: // (Custom) Reincarnation debuff
                         continue;
                 }
 
@@ -170,6 +181,14 @@ bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::s
     player->SetBattlegroundId(spectate->GetBattlegroundId(), spectate->GetBattlegroundTypeId(), PLAYER_MAX_BATTLEGROUND_QUEUES, false, false, TEAM_NEUTRAL);
     player->SetEntryPoint();
     player->TeleportTo(spectate->GetMapId(), spectate->GetPositionX(), spectate->GetPositionY(), z, spectate->GetOrientation(), TELE_TO_GM_MODE);
+
+    handler->PSendSysMessage(
+        "Comandos disponíveis: .sp <nome do player>\n"
+        "*Enquanto spectator: \n"
+        ".leave ou /afk (para sair do spectate) \n"
+        ".sp <nome do player> (para ver o PoV) \n"
+        ".sp <nome do player> (para sair do PoV)"
+    );
 
     return true;
 }

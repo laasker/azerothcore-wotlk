@@ -149,11 +149,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
     // pussywizard:
     switch (type)
     {
-        case CHAT_MSG_SAY:
+        //case CHAT_MSG_SAY:
         case CHAT_MSG_YELL:
         case CHAT_MSG_EMOTE:
         case CHAT_MSG_TEXT_EMOTE:
-        case CHAT_MSG_AFK:
+        //case CHAT_MSG_AFK:
         case CHAT_MSG_DND:
         if (sender->IsSpectator())
         {

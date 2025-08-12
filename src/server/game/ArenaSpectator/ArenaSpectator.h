@@ -36,7 +36,9 @@ class WorldPacket;
 #define SPECTATOR_COOLDOWN_MIN 20
 #define SPECTATOR_COOLDOWN_MAX 900
 #define SPECTATOR_SPELL_BINDSIGHT 6277
-#define SPECTATOR_SPELL_SPEED 1557
+#define SPECTATOR_SPELL_SPEED 1557 // Full Speed
+#define SPECTATOR_SPELL_FLY 53112  // Frostbrood Vanquisher Flight
+//#define SPECTATOR_SPELL_FLY 44140 // Harpoon Surfing
 
 namespace ArenaSpectator
 {

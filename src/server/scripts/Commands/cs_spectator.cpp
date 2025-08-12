@@ -41,7 +41,11 @@ public:
         };
         static ChatCommandTable commandTable =
         {
-            { "spect", spectatorCommandTable }
+            //{ "spect", spectatorCommandTable }
+
+            { "spect", spectatorCommandTable },
+            { "leave", HandleSpectatorLeaveCommand,    SEC_PLAYER, Console::No },
+            { "sp", HandleSpectatorSpectateCommand, SEC_PLAYER, Console::No }
         };
         return commandTable;
     }

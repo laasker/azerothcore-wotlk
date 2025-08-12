@@ -15448,6 +15448,7 @@ void Player::SetIsSpectator(bool on)
     if (on)
     {
         AddAura(SPECTATOR_SPELL_SPEED, this);
+        AddAura(SPECTATOR_SPELL_FLY, this);
         m_ExtraFlags |= PLAYER_EXTRA_SPECTATOR_ON;
         AddUnitState(UNIT_STATE_ISOLATED);
         //SetFaction(1100);
@@ -15458,11 +15459,13 @@ void Player::SetIsSpectator(bool on)
             sScriptMgr->OnPlayerFfaPvpStateUpdate(this, false);
         }
         ResetContestedPvP();
-        SetDisplayId(23691);
+        //SetDisplayId(23691); // Default Goblin
+        SetDisplayId(28215);   // White Bird
     }
     else
     {
         RemoveAurasDueToSpell(SPECTATOR_SPELL_SPEED);
+        RemoveAurasDueToSpell(SPECTATOR_SPELL_FLY);
         if (IsSpectator())
             ClearUnitState(UNIT_STATE_ISOLATED);
         m_ExtraFlags &= ~PLAYER_EXTRA_SPECTATOR_ON;

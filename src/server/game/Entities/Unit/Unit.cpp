@@ -9331,6 +9331,12 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                                 }
                                 break;
                             }
+                        // Modificar procar Spell p outra (Exemplo de spell q poderia usar: Ascendance (em vez de procar Windfury Weapon, proca um windfury que da dano magic etc)
+                        //case 16864: // Omen of Clarity
+                        //    if (HasAura(83078)) // id temporario/teste
+                        //    {
+                        //        trigger_spell_id = 83120;
+                        //    }
                         // Druid T9 Feral Relic (Lacerate, Swipe, Mangle, and Shred)
                         case 67353:
                             {

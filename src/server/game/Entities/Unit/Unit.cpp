@@ -13843,7 +13843,7 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy, uint32 duration)
         return;
 
     if (PvP)
-        m_CombatTimer = std::max<uint32>(GetCombatTimer(), std::max<uint32>(5500, duration));
+        m_CombatTimer = std::max<uint32>(GetCombatTimer(), std::max<uint32>(5700, duration));
     else if (duration)
         m_CombatTimer = std::max<uint32>(GetCombatTimer(), duration);
 

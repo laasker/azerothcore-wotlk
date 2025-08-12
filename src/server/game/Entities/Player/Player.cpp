@@ -1301,7 +1301,7 @@ void Player::ToggleAFK()
     ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK);
 
     // afk player not allowed in battleground
-    if (!IsGameMaster() && isAFK() && InBattleground())
+    if (!IsGameMaster() && isAFK() && InBattleground() &&InArena())
         LeaveBattleground();
 }
 

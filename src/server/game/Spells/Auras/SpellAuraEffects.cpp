@@ -501,6 +501,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 break;
             if (!caster)
                 break;
+            //amount = int32(GetBase()->GetUnitOwner()->CountPctFromMaxHealth(10)); 3
             // not impacted by gear
             // not impacted by target level
             // not impacted by rank

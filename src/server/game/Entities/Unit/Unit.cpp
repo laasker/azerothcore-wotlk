@@ -2453,6 +2453,9 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited)
 
             CleanDamage cleanDamage = CleanDamage(splitted, 0, BASE_ATTACK, MELEE_HIT_NORMAL);
             Unit::DealDamage(attacker, caster, splitted, &cleanDamage, DIRECT_DAMAGE, schoolMask, (*itr)->GetSpellInfo(), false);
+
+            // tentativa 2 - break 'Fear' and similar auras
+            // caster->ProcDamageAndSpellFor(true, attacker, PROC_FLAG_TAKEN_SPELL_MAGIC_DMG_CLASS_NEG, PROC_EX_NORMAL_HIT, BASE_ATTACK, (*itr)->GetSpellInfo(), splitted, 0, 0, 0, 0);
         }
 
         // We're going to call functions which can modify content of the list during iteration over it's elements
@@ -2481,6 +2484,8 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited)
                 if (!caster->IsWithinDist(victim, splitSpellInfo->GetMaxRange(splitSpellInfo->IsPositive(), caster)))
                     continue;
 
+            // try 1 uint32 splitDamage2 = CalculatePct(dmgInfo.GetDamage(), (*itr)->GetAmount());
+
             // dano recebido do HoS / Divine Sac quebra Hungering Cold (quando ta com Absorb)
             switch ((*itr)->GetId())
             {
@@ -2491,6 +2496,14 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited)
                         caster->RemoveAura(51209);
                     }
                     break;
+
+                // try1
+                //case 47809: // Shadowbolt - test
+                //    if (splitDamage2 >= caster->GetMaxHealth() * 0.1)  // Verifica se o dano absorvido/recebido é igual a 10% do HP do player
+                //    {
+                //        caster->RemoveAura(6215); // Remove a aura 6948 do caster
+                //    }
+                //    break;
 
                 default:
                     break;

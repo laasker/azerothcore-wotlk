@@ -8194,6 +8194,19 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                             // drop charges
                             return false;
                         }
+                    // Glyph of Stormstrike - passive to proc Stormblast DoT (on Stormstrike/Windfury crits)
+                    case 83332:
+                        {
+                            if (!victim)
+                                return false;
+
+                            // 3 damage tick
+                            basepoints0 = triggerAmount * damage / 300;
+                            triggered_spell_id = 83333;
+                            // Add remaining ticks to damage done
+                            victim->CastDelayedSpellWithPeriodicAmount(this, triggered_spell_id, SPELL_AURA_PERIODIC_DAMAGE, basepoints0);
+                            return true;
+                        }
                     // Totemic Power (The Earthshatterer set)
                     case 28823:
                         {

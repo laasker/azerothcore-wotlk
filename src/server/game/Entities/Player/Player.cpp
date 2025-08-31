@@ -3108,6 +3108,32 @@ bool Player::CheckSkillLearnedBySpell(uint32 spellId)
     if (!sWorld->getBoolConfig(CONFIG_VALIDATE_SKILL_LEARNED_BY_SPELLS))
         return true;
 
+    // Lista de spells que devem ser ignorados na checagem
+    static const std::unordered_set<uint32> ignoredSpells =
+    {
+        // Human - (Every Man for Himself, Diplomacy, Mace Spec, Perception, Sword Spec, The Human Spirit)
+        59752, 20599, 20864, 58985, 20597, 20598,
+        // Orc   - (Command, Hardiness, Axe Spec, Blood Fury) 
+        21563, 20575, 54562, 20576, 65222, 20573, 20574, 20572, 33702, 33697,
+        // Dwarf - (Gun Spec, Find Treasure, Frost Resist, Mace Spec, Stoneform)
+        20595, 2481, 20596, 59224, 20594,
+        // Night Elf - (Elusiveness, Nature Resist, Quickness, Shadowmeld, Wisp Spirit)
+        21009, 20583, 20582, 58984, 20585,
+        // Undead - (Cannibalize, Shadow Resist, Underwater, WotF)
+        20577, 20579, 5227, 7744,
+        // Tauren - (cultivation, endurance, nature resist, war stomp)
+        20552, 20550, 20551, 20549,
+        // Gnome - (arcane resist, engineering spec, escape artist, expansive mind)
+        20592, 20593, 20589, 20591,
+        // Troll - (Beast Slaying, Berserking, Bow Spec, Da Voodo Shuffle, Regeneration, Throwing Spec)
+        20557, 26297, 26290, 58943, 20555, 20558,
+        // Blood Elf - (Arcane Torrent, Arcane Affinity, Magic Resistance, Arcane Torrent(energy), Arcane Torrent(runic))
+        28730, 28877, 822, 25046, 50613,
+        // Draenei - (Heroic Presence, Gemcutting, Gift of the Naarum, Shadow resistance)
+        6562, 28878, 28875, 28880, 59542, 59543, 59544, 59545, 59547, 59548, 59221, 59535, 59536, 59538, 59539, 59540, 59541
+    };
+    if (ignoredSpells.count(spellId) > 0) return true;
+
     SkillLineAbilityMapBounds skill_bounds = sSpellMgr->GetSkillLineAbilityMapBounds(spellId);
     uint32 errorSkill = 0;
     for (SkillLineAbilityMap::const_iterator sla = skill_bounds.first; sla != skill_bounds.second; ++sla)

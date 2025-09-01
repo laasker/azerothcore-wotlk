@@ -25,6 +25,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "Chat.h"
 
 void WorldSession::HandleInspectArenaTeamsOpcode(WorldPacket& recvData)
 {
@@ -116,6 +117,12 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket& recvData)
     if (!arenaTeam)
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", "", ERR_ARENA_TEAM_PLAYER_NOT_IN_TEAM);
+        return;
+    }
+
+    if (arenaTeam && arenaTeam->GetType() == ARENA_TEAM_5v5)
+    {
+        ChatHandler(this).SendNotification("You cannot invite players to your 3v3 Solo Queue team.");
         return;
     }
 

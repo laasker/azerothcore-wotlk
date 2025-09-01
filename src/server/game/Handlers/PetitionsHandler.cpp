@@ -28,6 +28,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
+#include "Chat.h"
 
 void WorldSession::HandlePetitionBuyOpcode(WorldPacket& recvData)
 {
@@ -144,6 +145,12 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket& recvData)
     }
     else
     {
+        if (type == ARENA_TEAM_CHARTER_5v5_TYPE)
+        {
+            ChatHandler(_player->GetSession()).SendNotification("5v5 rated arena is disabled.");
+            return;
+        }
+
         if (sArenaTeamMgr->GetArenaTeamByName(name))
         {
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, name, "", ERR_ARENA_TEAM_NAME_EXISTS_S);

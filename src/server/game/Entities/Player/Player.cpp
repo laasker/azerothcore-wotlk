@@ -3777,6 +3777,13 @@ uint32 Player::resetTalentsCost() const
 
 bool Player::resetTalents(bool noResetCost)
 {
+    if (InBattleground() || InArena() || InBattlegroundQueueForBattlegroundQueueType((BattlegroundQueueTypeId)12) /*solo3v3*/ ||
+        InBattlegroundQueueForBattlegroundQueueType((BattlegroundQueueTypeId)11)) // solo1v1
+    {
+        ChatHandler(GetSession()).SendNotification("You can't reset your talents while in queue for solo arena.");
+        return false;
+    }
+
     sScriptMgr->OnPlayerTalentsReset(this, noResetCost);
 
     // xinef: remove at login flag upon talents reset

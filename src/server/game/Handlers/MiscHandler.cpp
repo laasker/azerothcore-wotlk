@@ -451,8 +451,30 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPackets::Character::LogoutRequ
         return;
     }
 
+    bool instantLogoutConfig = false;
+    switch (sWorld->getIntConfig(CONFIG_INSTANT_LOGOUT))
+    {
+        case 0: // Everyone
+            instantLogoutConfig = true;
+            break;
+        case 1: // Mods/GMs/Admins
+            instantLogoutConfig = GetSecurity() >= SEC_MODERATOR;
+            break;
+        case 2: // GMs/Admins
+            instantLogoutConfig = GetSecurity() >= SEC_GAMEMASTER;
+            break;
+        case 3: // Admins only
+            instantLogoutConfig = GetSecurity() >= SEC_ADMINISTRATOR;
+            break;
+        case 4: // Disabled
+        default:
+            instantLogoutConfig = false;
+            break;
+    }
+
     //instant logout in taverns/cities or on taxi or for admins, gm's, mod's if its enabled in worldserver.conf
-    if (instantLogout)
+    //if (instantLogout)
+    if (instantLogout || instantLogoutConfig)
     {
         LogoutPlayer(true);
         return;

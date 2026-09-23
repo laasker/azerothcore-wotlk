@@ -692,7 +692,12 @@ class spell_warr_sweeping_strikes : public AuraScript
                 if (spellInfo && spellInfo->Id == SPELL_WARRIOR_WHIRLWIND_MAIN)
                     eventInfo.GetActor()->AddSpellCooldown(SPELL_WARRIOR_SWEEPING_STRIKES_EXTRA_ATTACK_1, 0, 500);
 
-                auto damage = static_cast<int32>(damageInfo->GetUnmitigatedDamage());
+                //auto damage = static_cast<int32>(damageInfo->GetUnmitigatedDamage());
+                int32 damage = static_cast<int32>(damageInfo->GetUnmitigatedDamage());
+                if (damageInfo->GetHitMask() & PROC_HIT_CRITICAL)
+                    // Source damage already includes the melee critical multiplier.
+                    damage /= 2;
+
                 GetTarget()->CastCustomSpell(procTarget, SPELL_WARRIOR_SWEEPING_STRIKES_EXTRA_ATTACK_1,
                     &damage, nullptr, nullptr, true, nullptr, aurEff);
             }

@@ -90,13 +90,15 @@ void WorldSession::HandleTrainerListOpcode(WorldPackets::NPC::Hello& packet)
     SendTrainerList(npc);
 }
 
-void WorldSession::SendTrainerList(Creature* npc)
+void WorldSession::SendTrainerList(Creature* npc, uint32 trainerEntry)
 {
     // remove fake death
     if (GetPlayer()->HasUnitState(UNIT_STATE_DIED))
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
-    Trainer::Trainer const* trainer = sObjectMgr->GetTrainer(npc->GetEntry());
+    SetCurrentTrainer(trainerEntry);
+
+    Trainer::Trainer const* trainer = sObjectMgr->GetTrainer(GetCurrentTrainer() ? GetCurrentTrainer() : npc->GetEntry());
     if (!trainer)
     {
         LOG_DEBUG("network", "WorldSession: SendTrainerList - trainer spells not found for {}", npc->GetGUID().ToString().c_str());
@@ -129,7 +131,7 @@ void WorldSession::HandleTrainerBuySpellOpcode(WorldPackets::NPC::TrainerBuySpel
     if (GetPlayer()->HasUnitState(UNIT_STATE_DIED))
         GetPlayer()->RemoveAurasByType(SPELL_AURA_FEIGN_DEATH);
 
-    Trainer::Trainer* trainer = sObjectMgr->GetTrainer(npc->GetEntry());
+    Trainer::Trainer* trainer = sObjectMgr->GetTrainer(GetCurrentTrainer() ? GetCurrentTrainer() : npc->GetEntry());
     if (!trainer)
         return;
 

@@ -484,6 +484,9 @@ public:
     uint32 GetCurrentVendor() const { return m_currentVendorEntry; }
     void SetCurrentVendor(uint32 vendorEntry) { m_currentVendorEntry = vendorEntry; }
 
+    [[nodiscard]] uint32 GetCurrentTrainer() const { return m_currentTrainerEntry; }
+    void SetCurrentTrainer(uint32 trainerEntry) { m_currentTrainerEntry = trainerEntry; }
+
     ObjectGuid::LowType GetGuidLow() const;
     void SetSecurity(AccountTypes security) { _security = security; }
     std::string const& GetRemoteAddress() { return m_Address; }
@@ -544,7 +547,7 @@ public:
     //void SendTestCreatureQueryOpcode(uint32 entry, ObjectGuid guid, uint32 testvalue);
     void SendNameQueryOpcode(ObjectGuid guid);
 
-    void SendTrainerList(Creature* npc);
+    void SendTrainerList(Creature* npc, uint32 trainerEntry = 0);
     void SendListInventory(ObjectGuid guid, uint32 vendorEntry = 0);
     void SendShowBank(ObjectGuid guid);
     bool CanOpenMailBox(ObjectGuid guid);
@@ -1302,6 +1305,7 @@ private:
     bool isRecruiter;
     LockedQueue<WorldPacket*> _recvQueue;
     uint32 m_currentVendorEntry;
+    uint32 m_currentTrainerEntry;
     ObjectGuid m_currentBankerGUID;
     uint32 _offlineTime;
     bool _kicked;

@@ -12457,6 +12457,18 @@ bool Player::InBattlegroundQueue(bool ignoreArena) const
     return false;
 }
 
+bool Player::InArenaQueue() const
+{
+    for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+    {
+        if (_BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_2v2 || _BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_3v3)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 BattlegroundQueueTypeId Player::GetBattlegroundQueueTypeId(uint32 index) const
 {
     return _BgBattlegroundQueueID[index].bgQueueTypeId;

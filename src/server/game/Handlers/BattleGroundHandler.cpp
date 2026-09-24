@@ -584,6 +584,11 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
             if (!player)
                 continue;
 
+            if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+            {
+                sScriptMgr->OnPlayerBattlegroundDesertion(_player, ARENA_DESERTION_TYPE_LEAVE_QUEUE);
+            }
+
             bgQueue.RemovePlayer(playerGuid, true);
             player->RemoveBattlegroundQueueId(bgQueueTypeId);
 
@@ -611,8 +616,8 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
             sScriptMgr->OnPlayerBattlegroundDesertion(_player, BG_DESERTION_TYPE_LEAVE_QUEUE);
         }
 
-        if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
-            sScriptMgr->OnPlayerBattlegroundDesertion(_player, ARENA_DESERTION_TYPE_LEAVE_QUEUE);
+        //if (bg->isArena() && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+        //    sScriptMgr->OnPlayerBattlegroundDesertion(_player, ARENA_DESERTION_TYPE_LEAVE_QUEUE);
     }
 }
 

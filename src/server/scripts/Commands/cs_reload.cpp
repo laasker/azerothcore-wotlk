@@ -45,6 +45,7 @@
 #include "WardenCheckMgr.h"
 #include "WaypointMgr.h"
 #include "WorldGlobals.h"
+#include "../../../modules/mod-spell-regulator/src/SpellRegulator.h"
 
 using namespace Acore::ChatCommands;
 
@@ -168,6 +169,7 @@ public:
             { "spell_cone",                    HandleReloadSpellConeCommand,                  rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_TARGET_POSITION, Console::Yes },
             { "spell_threats",                 HandleReloadSpellThreatsCommand,               rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_THREATS, Console::Yes },
             { "spell_group_stack_rules",       HandleReloadSpellGroupStackRulesCommand,       rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_GROUP_STACK_RULES, Console::Yes },
+            { "spell_regulator",			   HandleReloadSpellRegulator,                    rbac::RBAC_PERM_COMMAND_RELOAD_SPELL_REGULATOR, Console::Yes },
             { "player_loot_template",          HandleReloadLootTemplatesPlayerCommand,        rbac::RBAC_PERM_COMMAND_RELOAD, Console::Yes },
             { "module_string",                 HandleReloadModuleStringCommand,               rbac::RBAC_PERM_COMMAND_RELOAD, Console::Yes },
             { "acore_string",                  HandleReloadAcoreStringCommand,                rbac::RBAC_PERM_COMMAND_RELOAD_ACORE_STRING, Console::Yes },
@@ -223,6 +225,7 @@ public:
         HandleReloadMotdCommand(handler);
         HandleReloadBroadcastTextCommand(handler);
         HandleReloadBattlegroundTemplate(handler);
+        HandleReloadSpellRegulator(handler);
         return true;
     }
 
@@ -968,6 +971,15 @@ public:
         LOG_INFO("server.loading", "Reloading Spell Group Stack Rules...");
         sSpellMgr->LoadSpellGroupStackRules();
         handler->SendGlobalGMSysMessage("DB table `spell_group_stack_rules` (spell stacking definitions) reloaded.");
+        return true;
+    }
+
+    static bool HandleReloadSpellRegulator(ChatHandler* handler)
+    {
+        #define sSpellRegulator SpellRegulator::instance()
+
+        sSpellRegulator->LoadFromDB();
+        handler->SendGlobalGMSysMessage("DB table `spell_regulator` reloaded.");
         return true;
     }
 

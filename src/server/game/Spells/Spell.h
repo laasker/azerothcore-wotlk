@@ -472,6 +472,8 @@ public:
     SpellCastResult CheckCast(bool strict, uint32* param1 = nullptr, uint32* param2 = nullptr);
     SpellCastResult CheckPetCast(Unit* target);
 
+    static uint32 GetCCDelay(SpellInfo const* _spell);
+
     // handlers
     void handle_immediate();
     uint64 handle_delayed(uint64 t_offset);

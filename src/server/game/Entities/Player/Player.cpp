@@ -6595,7 +6595,7 @@ void Player::CheckDuelDistance(time_t currTime)
 
     if (!duel->OutOfBoundsTime)
     {
-        if (!IsWithinDistInMap(obj, 50))
+        if (!IsWithinDistInMap(obj, /*50*/ 80))
         {
             duel->OutOfBoundsTime = currTime + 10;
 
@@ -6605,7 +6605,7 @@ void Player::CheckDuelDistance(time_t currTime)
     }
     else
     {
-        if (IsWithinDistInMap(obj, 40))
+        if (IsWithinDistInMap(obj, /*40*/ 70))
         {
             duel->OutOfBoundsTime = 0;
 

@@ -1914,6 +1914,16 @@ bool SpellInfo::CheckTargetCreatureType(Unit const* target) const
         else
             return true;
     }
+
+    //// Explosive Trap Effect - nao funciona parece
+    //if (Id == 83390)
+    //{
+    //    if (target && (target->IsPlayer() || (target->GetOwner() && target->GetOwner()->IsPlayer())))
+    //        return false;
+    //    else
+    //        return true;
+    //}
+
     uint32 creatureType = target->GetCreatureTypeMask();
     return !TargetCreatureType || !creatureType || (creatureType & TargetCreatureType);
 }

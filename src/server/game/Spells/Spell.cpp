@@ -2350,6 +2350,8 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
             (m_spellInfo->SpellFamilyFlags[0] & 0x18 ||              // Freezing and Frost Trap, Freezing Arrow
              m_spellInfo->Id == 57879 ||                               // Snake Trap - done this way to avoid double proc
              m_spellInfo->SpellFamilyFlags[2] & 0x00024000))          // Explosive and Immolation Trap
+             //m_spellInfo->SpellFamilyFlags[2] & 0x00064000 || m_spellInfo->Id == 83393)) // Explosive and Immolation Trap / Snake Trap Effect (Launcher - Custom ) parece que nao precisa
+                                            
     {
         m_procAttacker |= PROC_FLAG_DONE_TRAP_ACTIVATION;
 

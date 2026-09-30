@@ -302,7 +302,7 @@ void Battleground::Update(uint32 diff)
         case STATUS_IN_PROGRESS:
             if (isArena())
             {
-                if (GetStartTime() >= 46 * MINUTE * IN_MILLISECONDS) // pussywizard: 1min startup + 45min allowed duration
+                if (GetStartTime() >= /*46*/21 * MINUTE * IN_MILLISECONDS) // pussywizard: 1min startup + 45min allowed duration (agora é 20 minutos para Draw)
                 {
                     EndBattleground(PVP_TEAM_NEUTRAL);
                     return;

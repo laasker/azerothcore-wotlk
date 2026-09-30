@@ -87,7 +87,8 @@ protected:
 
 struct AC_GAME_API PvPCombatReference : public CombatReference
 {
-    static const uint32 PVP_COMBAT_TIMEOUT = 5 * IN_MILLISECONDS;
+    //static const uint32 PVP_COMBAT_TIMEOUT = 5 * IN_MILLISECONDS;
+    static const uint32 PVP_COMBAT_TIMEOUT = 5700;
 
 private:
     PvPCombatReference(Unit* first, Unit* second) : CombatReference(first, second, true) { }

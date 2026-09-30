@@ -488,6 +488,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     if (!unitCaster)
                         break;
 
+                    /*
                     // Ferocious Bite
                     if (unitCaster->IsPlayer() && (m_spellInfo->SpellFamilyFlags[0] & 0x000800000) && m_spellInfo->SpellVisual[0] == 6587)
                     {
@@ -497,7 +498,27 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         int32 energy = -(unitCaster->ModifyPower(POWER_ENERGY, -30));
                         damage += int32(energy * multiple);
                         damage += int32(CalculatePct(unitCaster->GetComboPoints() * ap, 7));
+                    }*/
+                    // Ferocious Bite / Glyph of Ferocious Bite (83285)
+                    if (unitCaster->IsPlayer() && (m_spellInfo->SpellFamilyFlags[0] & 0x000800000) && m_spellInfo->SpellVisual[0] == 6587)
+                    {
+                        if (unitCaster->HasAura(83285))
+                        {
+                            // remove the additional energy damage bonus and cost
+                            float ap = unitCaster->GetTotalAttackPowerValue(BASE_ATTACK);
+                            damage += int32(CalculatePct(unitCaster->GetComboPoints() * ap, 7));
+                        }
+                        // converts each extra point of energy into ($f1+$AP/410) additional damage (ferocious sem glyph)
+                        else
+                        {
+                            float ap = unitCaster->GetTotalAttackPowerValue(BASE_ATTACK);
+                            float multiple = ap / 410 + m_spellInfo->Effects[effIndex].DamageMultiplier;
+                            int32 energy = -(unitCaster->ModifyPower(POWER_ENERGY, -30));
+                            damage += int32(energy * multiple);
+                            damage += int32(CalculatePct(unitCaster->GetComboPoints() * ap, 7));
+                        }
                     }
+
                     // Wrath
                     else if (m_spellInfo->SpellFamilyFlags[0] & 0x00000001)
                     {

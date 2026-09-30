@@ -5305,6 +5305,7 @@ float Player::GetMeleeCritFromAgility()
 
 void Player::GetDodgeFromAgility(float& diminishing, float& nondiminishing)
 {
+    /*
     // Table for base dodge values
     const float dodge_base[MAX_CLASSES] =
     {
@@ -5334,6 +5335,37 @@ void Player::GetDodgeFromAgility(float& diminishing, float& nondiminishing)
         0.97f / 1.15f,  // Warlock (?)
         0.0f,           // ??
         2.00f / 1.15f   // Druid
+    };*/
+
+    // Table for base dodge values
+    const float dodge_base[MAX_CLASSES] =
+    {
+        0.036640f, // Warrior
+        0.001143f, // Paladin
+        -0.025873f, // Hunter
+        0.020957f, // Rogue
+        0.001050f, // Priest
+        0.036640f, // DK
+        0.000410f, // Shaman
+        0.000100f, // Mage
+        0.000100f, // Warlock
+        0.0f,      // ??
+        0.000010f  // Druid
+    };
+    // Crit/agility to dodge/agility coefficient multipliers; 3.2.0 increased required agility by 15%
+    const float crit_to_dodge[MAX_CLASSES] =
+    {
+        0.85f / 1.15f,  // Warrior
+        1.00f / 1.15f,  // Paladin
+        1.11f / 1.36f,  // Hunter
+        2.00f / 1.32f,  // Rogue
+        1.00f / 1.15f,  // Priest
+        0.85f / 1.15f,  // DK
+        1.60f / 1.15f,  // Shaman
+        1.00f / 1.15f,  // Mage
+        0.97f / 1.15f,  // Warlock (?)
+        0.0f,           // ??
+        2.00f / 1.44f   // Druid
     };
 
     uint8 level = GetLevel();

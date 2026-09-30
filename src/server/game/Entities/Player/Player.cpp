@@ -12049,7 +12049,10 @@ void Player::ApplyEquipCooldown(Item* pItem)
                 continue;
 
             if (Aura* itemAura = GetAura(spellData.SpellId, GetGUID(), pItem->GetGUID()))
-                itemAura->AddProcCooldown(std::chrono::steady_clock::now() + procEntry->Cooldown);
+                //itemAura->AddProcCooldown(std::chrono::steady_clock::now() + procEntry->Cooldown);
+                itemAura->AddProcCooldown(std::chrono::steady_clock::now() + 30s);
+
+            //AddSpellCooldown(spellData.SpellId, uint32(-1), 15/*30*/ * IN_MILLISECONDS);
             continue;
         }
 
@@ -12071,7 +12074,7 @@ void Player::ApplyEquipCooldown(Item* pItem)
         if (spellInfo && spellInfo->HasAttribute(SPELL_ATTR0_NOT_IN_COMBAT_ONLY_PEACEFUL))
             continue;
 
-        AddSpellCooldown(spellData.SpellId, pItem->GetEntry(), 30 * IN_MILLISECONDS, true, true);
+        AddSpellCooldown(spellData.SpellId, pItem->GetEntry(), /**/30 * IN_MILLISECONDS, true, true);
 
         WorldPacket data(SMSG_ITEM_COOLDOWN, 12);
         data << pItem->GetGUID();

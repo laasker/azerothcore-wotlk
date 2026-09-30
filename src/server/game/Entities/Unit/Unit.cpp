@@ -2322,7 +2322,19 @@ float Unit::GetEffectiveResistChance(Unit const* owner, SpellSchoolMask schoolMa
     float level = static_cast<float>(effectiveCasterLevel ? effectiveCasterLevel : victim->GetLevel());
     float resistanceConstant = 0.0f;
 
+    /*
     if (level > 60.0f)
+        resistanceConstant = 150.0f + (level - 60.0f) * (level - 67.5f);
+    else if (level > 20.0f)
+        resistanceConstant = 50.0f + (level - 20.0f) * 2.5f;
+    else
+        resistanceConstant = 50.0f;
+    */
+    // Boss level 83: greatly reduce partial resist chance
+    //if (level == 83.0f)
+    if (victim->GetLevel() == 83)
+        resistanceConstant = 9999999.0f;
+    else if (level > 60.0f)
         resistanceConstant = 150.0f + (level - 60.0f) * (level - 67.5f);
     else if (level > 20.0f)
         resistanceConstant = 50.0f + (level - 20.0f) * 2.5f;

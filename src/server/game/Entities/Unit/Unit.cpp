@@ -15552,6 +15552,24 @@ void Unit::NearTeleportTo(Position& pos, bool casting /*= false*/, bool vehicleT
     NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), casting, vehicleTeleport, withPet, removeTransport);
 }
 
+/*
+HandleDummyAuraProc
+
+    // Glyph of Stormstrike - passive to proc Stormblast DoT (on Stormstrike/Windfury crits)
+    case 83332:
+    {
+        if (!victim)
+            return false;
+
+        // 3 damage tick
+        basepoints0 = triggerAmount * damage / 300;
+        triggered_spell_id = 83333;
+        // Add remaining ticks to damage done
+        victim->CastDelayedSpellWithPeriodicAmount(this, triggered_spell_id, SPELL_AURA_PERIODIC_DAMAGE, basepoints0);
+        return true;
+    }
+*/
+
 void Unit::NearTeleportTo(float x, float y, float z, float orientation, bool casting /*= false*/, bool vehicleTeleport /*= false*/, bool withPet /*= false*/, bool removeTransport /*= false*/)
 {
     DisableSpline();

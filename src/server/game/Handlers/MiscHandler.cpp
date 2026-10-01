@@ -223,9 +223,11 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
     if (GetPlayer()->InArena() && !GetPlayer()->IsSpectator())
     {
-        //if (!GetPlayer()->IsGameMaster() && sWorld->getIntConfig(CONFIG_ENABLE_FAKE_WHO_ON_ARENA)) {}
-        GetPlayer()->GetSession()->SendAreaTriggerMessage("You may not use the who list in arena.");
-        return;
+        if (!GetPlayer()->IsGameMaster()/* && sWorld->getIntConfig(CONFIG_ENABLE_FAKE_WHO_ON_ARENA)*/)
+        {
+            GetPlayer()->GetSession()->SendAreaTriggerMessage("You may not use the who list in arena.");
+            return;
+        }
     }
 
     uint32 matchCount = 0;

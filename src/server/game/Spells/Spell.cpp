@@ -3682,6 +3682,15 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, AuraEffect const
         if (unitCaster->ToPlayer()->GetCommandStatus(CHEAT_CASTTIME))
             m_casttime = 0;
 
+    // Instant casts com Arena Preparation (com exceções p profissoes, talvez tem mais exceções p adicionar)
+    if (Player* plCaster = m_caster->ToPlayer())
+    {
+        Battleground* bg = plCaster->GetBattleground();
+        if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
+            if (!m_spellInfo->HasEffect(SPELL_EFFECT_CREATE_ITEM) && !m_spellInfo->HasEffect(SPELL_EFFECT_ENCHANT_ITEM) && !m_spellInfo->HasEffect(SPELL_EFFECT_MILLING) && !m_spellInfo->HasEffect(SPELL_EFFECT_DISENCHANT))
+                m_casttime = 0;
+    }
+
     // don't allow channeled spells / spells with cast time to be casted while moving
     // (even if they are interrupted on moving, spells with almost immediate effect get to have their effect processed before movement interrupter kicks in)
     if ((m_spellInfo->IsChanneled() || m_casttime) && unitCaster && unitCaster->IsPlayer() && unitCaster->isMoving() && m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT && !IsTriggered())
@@ -4222,6 +4231,12 @@ void Spell::_cast(bool skipCheck)
     if (unitCaster && unitCaster->IsPlayer())
         if (unitCaster->ToPlayer()->GetCommandStatus(CHEAT_COOLDOWN))
             unitCaster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id, true);
+
+    /*
+    // Arena Preparation Haste - Spells ficam sem CD, da pra abusar com fear ward em todo mundo etc
+    if (unitCaster && unitCaster->IsPlayer())
+        if (unitCaster->ToPlayer()->HasAura(83025))
+            unitCaster->ToPlayer()->RemoveSpellCooldown(m_spellInfo->Id, true);*/
 
     sScriptMgr->OnSpellCast(this, unitCaster, m_spellInfo, skipCheck);
 
@@ -9442,6 +9457,12 @@ void Spell::TriggerGlobalCooldown()
         else
             return;
     }
+
+    /*
+    // Arena Preparation Haste nao da GCD (83025) - nao ta funcionando for some reason. O gcd continua igual.
+    if (unitCaster && unitCaster->IsPlayer()) //if (unitCaster->IsPlayer())
+        if (unitCaster->ToPlayer()->HasAura(83025))
+            return;*/
 
     if (unitCaster->IsPlayer())
         if (unitCaster->ToPlayer()->GetCommandStatus(CHEAT_COOLDOWN))

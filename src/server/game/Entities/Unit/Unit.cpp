@@ -5377,11 +5377,18 @@ void Unit::RemoveArenaAuras()
     // used to remove positive visible auras in arenas
     RemoveAppliedAuras([](AuraApplication const* aurApp)
     {
+        //Aura const* aura = aurApp->GetBase();
+        //return (!aura->GetSpellInfo()->HasAttribute(SPELL_ATTR4_ALLOW_ENETRING_ARENA)                          // don't remove stances, shadowform, pally/hunter auras
+            //&& !aura->IsPassive()                                                                              // don't remove passive auras
+            //&& (aurApp->IsPositive() || !aura->GetSpellInfo()->HasAttribute(SPELL_ATTR3_ALLOW_AURA_WHILE_DEAD))) || // not negative death persistent auras
+            //aura->GetSpellInfo()->HasAttribute(SPELL_ATTR5_REMOVE_ENTERING_ARENA);                             // special marker, always remove
+
         Aura const* aura = aurApp->GetBase();
-        return (!aura->GetSpellInfo()->HasAttribute(SPELL_ATTR4_ALLOW_ENETRING_ARENA)                          // don't remove stances, shadowform, pally/hunter auras
-            && !aura->IsPassive()                                                                              // don't remove passive auras
-            && (aurApp->IsPositive() || !aura->GetSpellInfo()->HasAttribute(SPELL_ATTR3_ALLOW_AURA_WHILE_DEAD))) || // not negative death persistent auras
-            aura->GetSpellInfo()->HasAttribute(SPELL_ATTR5_REMOVE_ENTERING_ARENA);                             // special marker, always remove
+        return (!aura->GetSpellInfo()->HasAttribute(SPELL_ATTR4_ALLOW_ENETRING_ARENA)                             // don't remove stances, shadowform, pally/hunter auras
+            && !aura->IsPassive()                                                                                 // don't remove passive auras
+            && (aurApp->IsPositive() || !aura->GetSpellInfo()->HasAttribute(SPELL_ATTR3_ALLOW_AURA_WHILE_DEAD)))  // not negative death persistent auras
+            || aura->GetSpellInfo()->HasAttribute(SPELL_ATTR5_REMOVE_ENTERING_ARENA)                              // special marker, always remove
+     /*novo*/|| aura->GetSpellInfo()->HasAttribute(SPELL_ATTR4_NOT_IN_ARENA_OR_RATED_BATTLEGROUND);               // remove auras not allowed in arena or rated bg (futuro T11?)
     });
 }
 

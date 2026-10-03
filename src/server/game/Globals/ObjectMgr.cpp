@@ -208,6 +208,10 @@ std::string ScriptInfo::GetDebugInfo() const
 
 bool normalizePlayerName(std::string& name)
 {
+    bool result = false;
+    if (sScriptMgr->CanNormalizePlayerName(name, result))
+        return result;
+
     if (name.empty())
         return false;
 
@@ -9281,6 +9285,10 @@ bool isValidString(std::wstring wstr, uint32 strictMask, bool numericOrSpace, bo
 
 uint8 ObjectMgr::CheckPlayerName(std::string_view name, bool create)
 {
+    uint8 result = CHAR_NAME_SUCCESS;
+    if (sScriptMgr->OnCheckPlayerName(name, create, result))
+        return result;
+
     std::wstring wname;
 
     // Check for invalid characters

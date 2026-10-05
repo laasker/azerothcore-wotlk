@@ -34,6 +34,8 @@
 #include "TC9Sidecar.h"
 #include "WorldSession.h"
 
+#include <array>
+
 BossBoundaryData::~BossBoundaryData()
 {
     for (const_iterator it = begin(); it != end(); ++it)
@@ -705,6 +707,53 @@ void InstanceScript::DoRemoveAurasDueToSpellOnPlayers(uint32 spell)
         player->RemoveAurasDueToSpell(spell);
         if (Pet* pet = player->GetPet())
             pet->RemoveAurasDueToSpell(spell);
+    });
+}
+
+void InstanceScript::ResetCooldownsAndAurasOnPlayers()
+{
+    if (sWorld->getIntConfig(CONFIG_RESET_CDS_ON_BOSS_KILL) != 1)
+        return;
+
+    instance->DoForAllPlayers([](Player* player)
+    {
+        //player->ResetPlayersRaidSpellCooldowns();
+        player->RemoveAllSpellCooldown();
+        // pet cooldowns
+        if (Pet* pet = player->GetPet(); pet && pet->IsInWorld())
+        {
+            for (auto const& cooldown : pet->m_CreatureSpellCooldowns)
+                player->SendClearCooldown(cooldown.first, pet);
+
+            pet->m_CreatureSpellCooldowns.clear();
+        }
+
+        static constexpr std::array<uint32, 11> resetAuraSpells = {
+            25771, // Forbearance
+            57723, // Sated
+            57724, // Exhaustion
+            41425, // Hypothermia
+            66233, // Ardent Defender (Prot paladin)
+            61988, // Server Side Forbearance
+            61987, // Avenging Wrath Marker (server side forbearance) - pala
+            79500, // Custom - Cheated Death (Custom visual only) - Rogue
+            79501, // Custom - Forbearance Custom (visual only) - pala
+            79502, // Custom - Nature's Swiftness (Custom visual only) - Druid
+            79503  // Custom - Reincarnation - Shaman
+        };
+
+        for (uint32 spellId : resetAuraSpells)
+            player->RemoveAurasDueToSpell(spellId);
+
+        if (Pet* pet = player->GetPet())
+        {
+            //if (pet && pet->IsInWorld())
+            //{
+            // 
+            //}
+            pet->RemoveAurasDueToSpell(57723);
+            pet->RemoveAurasDueToSpell(57724);
+        }
     });
 }
 

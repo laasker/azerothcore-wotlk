@@ -239,6 +239,9 @@ public:
     // Remove Auras due to Spell on all players in instance
     void DoRemoveAurasDueToSpellOnPlayers(uint32 spell);
 
+    // Custom
+    void ResetCooldownsAndAurasOnPlayers();
+
     // Cast spell on all players in instance
     void DoCastSpellOnPlayers(uint32 spell);
 

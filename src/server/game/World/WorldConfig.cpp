@@ -620,6 +620,9 @@ void WorldConfig::BuildConfigCache()
     SetConfigValue<uint32>(CONFIG_WINTERGRASP_NOBATTLETIME, "Wintergrasp.NoBattleTimer", 150);
     SetConfigValue<uint32>(CONFIG_WINTERGRASP_RESTART_AFTER_CRASH, "Wintergrasp.CrashRestartTimer", 10);
 
+    // Custom Battleborn
+    SetConfigValue<uint32>(CONFIG_RESET_CDS_ON_BOSS_KILL, "Reset.CDs.OnBossKill", 1);
+
     SetConfigValue<uint32>(CONFIG_WINTERGRASP_SKIP_BATTLE_SESSION_COUNT, "Wintergrasp.SkipBattleSessionCount", 3500);
     SetConfigValue<bool>(CONFIG_WINTERGRASP_KICK_VOA_PLAYERS, "Wintergrasp.KickVoAPlayers", true, ConfigValueCache::Reloadable::No);
     SetConfigValue<bool>(CONFIG_WINTERGRASP_ESSENCE_BOTH_FACTIONS, "Wintergrasp.EssenceBothFactions", false);

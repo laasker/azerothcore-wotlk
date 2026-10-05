@@ -1691,8 +1691,8 @@ SpellCastResult SpellInfo::CheckTarget(WorldObject const* caster, WorldObject co
     if (unitTarget)
     {
         // xinef: spells cannot be cast if player is in fake combat also
-        if (AttributesEx & SPELL_ATTR1_ONLY_PEACEFUL_TARGETS && (unitTarget->IsInCombat() || unitTarget->IsPetInCombat()))
-            return SPELL_FAILED_TARGET_AFFECTING_COMBAT;
+        //if (AttributesEx & SPELL_ATTR1_ONLY_PEACEFUL_TARGETS && (unitTarget->IsInCombat() || unitTarget->IsPetInCombat()))
+        //    return SPELL_FAILED_TARGET_AFFECTING_COMBAT;
 
         if (HasAttribute(SPELL_ATTR3_NOT_ON_AOE_IMMUNE))
             if (auto creature = unitTarget->ToCreature())

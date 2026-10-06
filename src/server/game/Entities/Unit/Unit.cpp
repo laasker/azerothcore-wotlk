@@ -7197,8 +7197,7 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
 
     if (creature && (!IsControlledByPlayer() || (IsGuardian() && !IsControllableGuardian())))
     {
-        //bool const isPlayerControlledNonControllableGuardianAttackingPlayer = IsControlledByPlayer() && IsGuardian() &&
-        //    !IsControllableGuardian() && victim->IsPlayer();
+        //bool const isPlayerControlledNonControllableGuardianAttackingPlayer = IsControlledByPlayer() && IsGuardian() && !IsControllableGuardian() && victim->IsPlayer();
         //EngageWithTarget(victim, isPlayerControlledNonControllableGuardianAttackingPlayer);
         EngageWithTarget(victim);
 

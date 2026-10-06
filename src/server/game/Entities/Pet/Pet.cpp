@@ -1255,8 +1255,8 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                         }
                     case NPC_DOOMGUARD:
                         {
-                            float highAmt = petlevel / 11.0f;
-                            float lowAmt = petlevel / 12.0f;
+                            float highAmt = petlevel / 9.0f; // 11.0f; 
+                            float lowAmt = petlevel / 9.5f; // 12.0f;
                             SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, lowAmt * lowAmt * lowAmt);
                             SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, highAmt * highAmt * highAmt);
 

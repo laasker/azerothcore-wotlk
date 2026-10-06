@@ -7197,6 +7197,9 @@ bool Unit::Attack(Unit* victim, bool meleeAttack)
 
     if (creature && (!IsControlledByPlayer() || (IsGuardian() && !IsControllableGuardian())))
     {
+        //bool const isPlayerControlledNonControllableGuardianAttackingPlayer = IsControlledByPlayer() && IsGuardian() &&
+        //    !IsControllableGuardian() && victim->IsPlayer();
+        //EngageWithTarget(victim, isPlayerControlledNonControllableGuardianAttackingPlayer);
         EngageWithTarget(victim);
 
         if (!IsControlledByPlayer())
@@ -7303,13 +7306,16 @@ void Unit::CombatStopWithPets(bool includingCast)
         (*itr)->CombatStop(includingCast);
 }
 
+//void Unit::EngageWithTarget(Unit* who, bool suppressTargetCombat)
 void Unit::EngageWithTarget(Unit* who)
 {
     if (!who)
         return;
     if (CanHaveThreatList())
+        //m_threatManager.AddThreat(who, 0.0f, nullptr, true, true, suppressTargetCombat);
         m_threatManager.AddThreat(who, 0.0f, nullptr, true, true);
     else
+        //GetCombatManager().SetInCombatWith(who, suppressTargetCombat);
         SetInCombatWith(who);
 }
 

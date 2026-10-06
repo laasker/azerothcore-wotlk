@@ -389,6 +389,8 @@ void ThreatManager::EvaluateSuppressed(bool canExpire)
     }
 }
 
+//void ThreatManager::AddThreat(Unit* target, float amount, SpellInfo const* spell, bool ignoreModifiers,
+//    bool ignoreRedirects, bool suppressTargetCombat)
 void ThreatManager::AddThreat(Unit* target, float amount, SpellInfo const* spell, bool ignoreModifiers, bool ignoreRedirects)
 {
     // step 1: we can shortcut if the spell has one of the NO_THREAT attrs set - nothing will happen
@@ -414,6 +416,7 @@ void ThreatManager::AddThreat(Unit* target, float amount, SpellInfo const* spell
     {
         CombatManager& combatMgr = _owner->GetCombatManager();
         if (!combatMgr.SetInCombatWith(target))
+        //if (!combatMgr.SetInCombatWith(target, suppressTargetCombat))
             return;
         // traverse redirects and put them in combat, too
         for (auto const& pair : target->GetThreatMgr()._redirectInfo)
@@ -457,6 +460,7 @@ void ThreatManager::AddThreat(Unit* target, float amount, SpellInfo const* spell
 
     // ensure we're in combat (threat implies combat!)
     if (!_owner->GetCombatManager().SetInCombatWith(target)) // if this returns false, we're not actually in combat, and thus cannot have threat!
+    //if (!_owner->GetCombatManager().SetInCombatWith(target, suppressTargetCombat)) // if this returns false, we're not actually in combat, and thus cannot have threat!
         return;                                              // typical causes: bad scripts trying to add threat to GMs, dead targets etc
 
     // ok, now we actually apply threat

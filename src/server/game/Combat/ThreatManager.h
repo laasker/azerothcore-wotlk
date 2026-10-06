@@ -144,6 +144,8 @@ public:
     void EvaluateSuppressed(bool canExpire = false);
 
     ///== AFFECT MY THREAT LIST ==
+    //void AddThreat(Unit* target, float amount, SpellInfo const* spell = nullptr, bool ignoreModifiers = false,
+    //    bool ignoreRedirects = false, bool suppressTargetCombat = false);
     void AddThreat(Unit* target, float amount, SpellInfo const* spell = nullptr, bool ignoreModifiers = false, bool ignoreRedirects = false);
     void ScaleThreat(Unit* target, float factor);
     // Modify target's threat by +percent%

@@ -936,6 +936,7 @@ public:
 
     virtual bool IsEngaged() const { return IsInCombat(); }
     bool IsEngagedBy(Unit const* who) const { return CanHaveThreatList() ? IsThreatenedBy(who) : IsInCombatWith(who); }
+    //void EngageWithTarget(Unit* who, bool suppressTargetCombat = false);
     void EngageWithTarget(Unit* who);
 
     [[nodiscard]] bool IsInCombat() const { return HasUnitFlag(UNIT_FLAG_IN_COMBAT); }

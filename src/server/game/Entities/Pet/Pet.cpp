@@ -1333,11 +1333,12 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                             {
                                 SetCreateMana(28 + 30 * petlevel);
                                 SetCreateHealth(28 + 10 * petlevel);
+                                //SetCreateHealth(4628); nao ta funcionando, tem que mudar no creature_template (healthModifier)
                             }
 
                             AddAura(SPELL_PET_AVOIDANCE, this);
-                            AddAura(SPELL_HUNTER_PET_SCALING_04, this);
-                            AddAura(SPELL_MAGE_PET_SCALING_01, this);
+                            AddAura(SPELL_HUNTER_PET_SCALING_04, this); // hit / spellhit / expertise
+                            //AddAura(SPELL_MAGE_PET_SCALING_01, this); // dobra o HP praticamente (10.3k) (mudar effect_1 p/ 0 db spell_dbc)
                             AddAura(SPELL_MAGE_PET_SCALING_02, this);
                             AddAura(SPELL_MAGE_PET_SCALING_03, this);
                             AddAura(SPELL_MAGE_PET_SCALING_04, this);

@@ -717,7 +717,6 @@ void InstanceScript::ResetCooldownsAndAurasOnPlayers()
 
     instance->DoForAllPlayers([](Player* player)
     {
-        //player->ResetPlayersRaidSpellCooldowns();
         player->RemoveAllSpellCooldown();
         // pet cooldowns
         if (Pet* pet = player->GetPet(); pet && pet->IsInWorld())
@@ -745,12 +744,9 @@ void InstanceScript::ResetCooldownsAndAurasOnPlayers()
         for (uint32 spellId : resetAuraSpells)
             player->RemoveAurasDueToSpell(spellId);
 
-        if (Pet* pet = player->GetPet())
+        //if (Pet* pet = player->GetPet())
+        if (Pet* pet = player->GetPet(); pet && pet->IsInWorld())
         {
-            //if (pet && pet->IsInWorld())
-            //{
-            // 
-            //}
             pet->RemoveAurasDueToSpell(57723);
             pet->RemoveAurasDueToSpell(57724);
         }

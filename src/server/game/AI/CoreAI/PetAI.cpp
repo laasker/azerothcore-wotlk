@@ -194,9 +194,7 @@ void PetAI::UpdateAI(uint32 diff)
     }
     else if (!me->GetCharmInfo() || (!me->GetCharmInfo()->GetForcedSpell() && !(me->IsPet() && me->ToPet()->HasTempSpell()) && !me->HasUnitState(UNIT_STATE_CASTING)))
     {
-        if (me->GetCharmInfo()->HasCommandState(COMMAND_STAY) && !me->GetCharmInfo()->IsAtStay() && me->GetCharmInfo()->HasStayPosition())
-            HandleReturnMovement();
-        else if (me->HasReactState(REACT_AGGRESSIVE) || me->GetCharmInfo()->IsAtStay())
+        if (me->HasReactState(REACT_AGGRESSIVE) || me->GetCharmInfo()->IsAtStay())
         {
             // Every update we need to check targets only in certain cases
             // Aggressive - Allow auto select if owner or pet don't have a target

@@ -342,6 +342,7 @@ struct boss_freya : public BossAI
                 // Defeat credit
                 me->CastSpell(me, 65074, true); // credit
                 instance->SetBossState(BOSS_FREYA, DONE);
+                instance->ResetCooldownsAndAurasOnPlayers();
 
                 scheduler.Schedule(14s, [this](TaskContext /*context*/)
                 {

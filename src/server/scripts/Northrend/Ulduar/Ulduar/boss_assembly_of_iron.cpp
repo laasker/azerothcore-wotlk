@@ -288,6 +288,8 @@ struct boss_steelbreaker : public ScriptedAI
             pInstance->SetBossState(BOSS_ASSEMBLY, DONE);
             me->CastSpell(me, 65195, true); // credit
             Talk(SAY_STEELBREAKER_ENCOUNTER_DEFEATED);
+
+            pInstance->ResetCooldownsAndAurasOnPlayers();
         }
         else
         {

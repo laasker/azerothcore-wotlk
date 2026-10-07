@@ -124,7 +124,10 @@ struct boss_faction_championsAI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/) override
     {
         if (pInstance && mAIType != AI_PET)
+        {
             pInstance->SetData(TYPE_FACTION_CHAMPIONS, DONE);
+            pInstance->ResetCooldownsAndAurasOnPlayers();
+        }
     }
 
     void KilledUnit(Unit*  /*who*/) override

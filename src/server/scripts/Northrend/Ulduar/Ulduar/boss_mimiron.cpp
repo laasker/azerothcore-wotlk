@@ -285,6 +285,7 @@ struct boss_mimiron : public BossAI
     {
         if (!me->IsAlive())
             instance->SetBossState(BOSS_MIMIRON, DONE);
+            //instance->ResetCooldownsAndAurasOnPlayers();
 
         _isEvading = false;
     }

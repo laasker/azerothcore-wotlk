@@ -319,7 +319,10 @@ struct boss_thorim : public BossAI
     {
         _encounterFinished = !me->IsAlive();
         if (_encounterFinished)
+        {
             instance->SetBossState(BOSS_THORIM, DONE);
+            instance->ResetCooldownsAndAurasOnPlayers();
+        }
     }
 
     bool _isArenaEmpty;
@@ -592,6 +595,7 @@ struct boss_thorim : public BossAI
                 // Defeat credit
                 me->CastSpell(me, 64985, true); // credit
                 instance->SetBossState(BOSS_THORIM, DONE);
+                instance->ResetCooldownsAndAurasOnPlayers();
             }
         }
     }

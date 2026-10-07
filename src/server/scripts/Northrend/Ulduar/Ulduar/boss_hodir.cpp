@@ -214,7 +214,10 @@ struct boss_hodir : public BossAI
     boss_hodir(Creature* creature) : BossAI(creature, BOSS_HODIR)
     {
         if (!me->IsAlive())
+        {
             instance->SetBossState(BOSS_HODIR, DONE);
+            instance->ResetCooldownsAndAurasOnPlayers();
+        }
     }
 
     ObjectGuid Helpers[8];

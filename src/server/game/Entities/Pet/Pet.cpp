@@ -766,6 +766,17 @@ void Pet::CastPendingSpell()
         m_tempoldTarget = ObjectGuid::Empty;
         m_tempspellIsPositive = false;
 
+        // nao sei se realmente é necessario essa parte, fiz um teste rapido e parece que funciona normalmente sem isso, mas w/e vou deixar
+        if (charmInfo->HasCommandState(COMMAND_STAY))
+        {
+            AttackStop();
+            charmInfo->SetIsCommandAttack(false);
+            charmInfo->SetIsAtStay(false);
+            charmInfo->SetIsFollowing(false);
+            charmInfo->SetIsReturning(false);
+            return;
+        }
+
         Unit* victim = charmer->GetVictim();
 
         StopMoving();
@@ -828,6 +839,19 @@ void Pet::CastPendingSpell()
     CastSpell(tempSpellTarget, tempSpell, false);
     m_tempspell = 0;
     m_tempspellTarget = ObjectGuid::Empty;
+
+    if (charmInfo->HasCommandState(COMMAND_STAY))
+    {
+        // A stay command allows temporary movement for an explicit cast, then returns the pet to its saved position.
+        AttackStop();
+        charmInfo->SetIsCommandAttack(false);
+        charmInfo->SetIsAtStay(false);
+        charmInfo->SetIsFollowing(false);
+        charmInfo->SetIsReturning(false);
+        m_tempoldTarget = ObjectGuid::Empty;
+        m_tempspellIsPositive = false;
+        return;
+    }
 
     if (tempSpellIsPositive)
     {

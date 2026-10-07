@@ -462,8 +462,9 @@ void WorldSession::HandlePetActionHelper(Unit* pet, ObjectGuid guid1, uint32 spe
 
                     if (pet->isPossessed() || pet->IsVehicle())
                         Spell::SendCastResult(GetPlayer(), spellInfo, 0, result);
-                    else if (charmInfo->HasCommandState(COMMAND_STAY))
-                        spell->SendPetCastResult(result);
+                    //else if (charmInfo->HasCommandState(COMMAND_STAY))
+                    // "Your pet is out of range." - da essa mensagem caso esteja em stay e fora do range, ainda permite usar caso tenha dado comment no codigo abaixo
+                    //    spell->SendPetCastResult(result);
                     else if (GetPlayer()->IsFriendlyTo(unit_target) && !haspositiveeffect)
                         spell->SendPetCastResult(SPELL_FAILED_TARGET_FRIENDLY);
                     else
@@ -479,14 +480,16 @@ void WorldSession::HandlePetActionHelper(Unit* pet, ObjectGuid guid1, uint32 spe
                     if (_player->HasPacifyAura())
                         return;
 
-                    if (charmInfo->HasCommandState(COMMAND_STAY))
-                    {
-                        charmInfo->SetForcedSpell(0);
-                        charmInfo->SetForcedTargetGUID();
-                        return;
-                    }
+                    //if (charmInfo->HasCommandState(COMMAND_STAY))
+                    //{
+                    //   la em cima da a mensagem que ta out of range, mas aqui que proibe o uso da spell.
+                    //    charmInfo->SetForcedSpell(0);
+                    //    charmInfo->SetForcedTargetGUID();
+                    //    return;
+                    //}
 
                     bool tempspellIsPositive = false;
+                    //bool const isStayCommand = charmInfo->HasCommandState(COMMAND_STAY); // parece q nao é necessario
 
                     if (!GetPlayer()->IsFriendlyTo(unit_target))
                     {
@@ -516,6 +519,9 @@ void WorldSession::HandlePetActionHelper(Unit* pet, ObjectGuid guid1, uint32 spe
 
                                 pet->ToCreature()->AI()->AttackStart(TargetUnit);
 
+                                //if (isStayCommand) // parece q nao é necessario
+                                //    charmInfo->SetIsCommandAttack(false);
+
                                 if (pet->IsPet() && pet->ToPet()->getPetType() == SUMMON_PET && pet != TargetUnit && roll_chance_i(10))
                                     pet->SendPetActionSound(PET_ACTION_SPECIAL_SPELL);
                                 else
@@ -533,6 +539,9 @@ void WorldSession::HandlePetActionHelper(Unit* pet, ObjectGuid guid1, uint32 spe
                                 charmInfo->SetIsReturning(false);
 
                                 pet->Attack(TargetUnit, true);
+                                //if (isStayCommand)
+                                //    charmInfo->SetIsCommandAttack(false);
+
                                 pet->SendPetAIReaction(guid1);
                             }
 

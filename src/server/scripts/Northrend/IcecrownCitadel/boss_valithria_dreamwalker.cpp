@@ -340,6 +340,7 @@ public:
                 _events.ScheduleEvent(EVENT_DREAM_SLIP, 3500ms);
                 if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetGuidData(DATA_VALITHRIA_LICH_KING)))
                     lichKing->AI()->EnterEvadeMode();
+                _instance->ResetCooldownsAndAurasOnPlayers();
             }
             else if (!_over75PercentTalkDone && me->HealthAbovePctHealed(75, heal))
             {

@@ -830,7 +830,8 @@ void Pet::CastPendingSpell()
     charmInfo->SetIsCommandFollow(false);
     charmInfo->SetIsFollowing(false);
     charmInfo->SetIsReturning(false);
-    charmInfo->SaveStayPosition(true);
+    if (!charmInfo->HasCommandState(COMMAND_STAY))
+        charmInfo->SaveStayPosition(true);
 
     AddSpellCooldown(tempSpell, 0, spellInfo->IsCooldownStartedOnEvent() ? infinityCooldownDelay : 0);
 

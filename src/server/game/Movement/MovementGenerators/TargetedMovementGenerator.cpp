@@ -517,10 +517,12 @@ static Optional<float> GetVelocity(Unit* owner, Unit* target, G3D::Vector3 const
 
         if (playerPet)
         {
-            float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 2.f);
+            //float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 2.f);
+            float distance = owner->GetDistance2d(dest.x, dest.y) - target->GetObjectSize() - (*speed / 0.12f);
             if (distance > 0.f)
             {
-                float const multiplier = std::min(1.f + (distance / 10.f), FOLLOW_CATCHUP_MAX_MULTIPLIER);
+                float const multiplier = std::min(1.f + (distance / 12.f), FOLLOW_CATCHUP_MAX_MULTIPLIER);
+                //float const multiplier = 0.45f + (distance / 20.f);
                 *speed *= multiplier;
             }
         }

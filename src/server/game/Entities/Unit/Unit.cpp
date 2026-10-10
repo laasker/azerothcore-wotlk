@@ -2570,6 +2570,8 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited, uint8 casterLevel
                 continue;
 
             int32 splitDamage = (*itr)->GetAmount();
+            // 1
+            //uint32 splitDamage2 = CalculatePct(dmgInfo.GetDamage(), (*itr)->GetAmount());
 
             // absorb must be smaller than the damage itself
             splitDamage = RoundToInterval(splitDamage, 0, int32(dmgInfo.GetDamage()));
@@ -2644,6 +2646,13 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited, uint8 casterLevel
                         caster->RemoveAura(51209);
                     }
                     break;
+                // 1
+                /*case 47809: // Shadowbolt - test
+                if (splitDamage2 >= caster->GetMaxHealth() * 0.1)  // Verifica se o dano absorvido/recebido é igual a 10% do HP do player
+                {
+                    caster->RemoveAura(6215);  // Remove a aura 6948 do caster
+                }
+                break;*/
 
                 default:
                     break;
@@ -2701,6 +2710,9 @@ void Unit::CalcAbsorbResist(DamageInfo& dmgInfo, bool Splited, uint8 casterLevel
 
             CleanDamage cleanDamage = CleanDamage(splitted, 0, BASE_ATTACK, MELEE_HIT_NORMAL);
             Unit::DealDamage(attacker, caster, splitted, &cleanDamage, DIRECT_DAMAGE, splitSchoolMask, splitSpellInfo, false);
+
+            // 2
+            // caster->ProcDamageAndSpellFor(true, attacker, PROC_FLAG_TAKEN_SPELL_MAGIC_DMG_CLASS_NEG, PROC_EX_NORMAL_HIT, BASE_ATTACK, (*itr)->GetSpellInfo(), splitted, 0, 0, 0, 0);
         }
     }
 }

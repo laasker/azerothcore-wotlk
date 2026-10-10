@@ -13918,6 +13918,30 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
     sScriptMgr->OnUnitDeath(victim, killer);
 }
 
+/*
+bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* triggeredByAura, SpellInfo const* procSpell, uint32 procFlags, uint32 procEx, uint32 cooldown, uint32 procPhase, ProcEventInfo& eventInfo)
+
+    // Try handle unknown trigger spells
+    //if (sSpellMgr->GetSpellInfo(trigger_spell_id) == nullptr)
+    {
+        switch (auraSpellInfo->SpellFamilyName)
+        {
+            case SPELLFAMILY_GENERIC:
+                switch (auraSpellInfo->Id)
+                {
+                    case SPELLFAMILY_DRUID:
+                {
+                    switch (auraSpellInfo->Id)
+
+                        // Battleborn
+                        // Modificar procar Spell p outra (Exemplo de spell q poderia usar: Ascendance (em vez de procar Windfury Weapon, proca um windfury que da dano magic etc)
+                        case 16864:
+                            if (HasAura(83078)) // id temporario
+                            {
+                                trigger_spell_id = 83120;
+                            }
+*/
+
 void Unit::SetControlled(bool apply, UnitState state, Unit* source /*= nullptr*/, bool isFear /*= false*/)
 {
     if (apply)

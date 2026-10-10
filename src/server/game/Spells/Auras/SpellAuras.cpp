@@ -1494,6 +1494,16 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                         caster->CastCustomSpell(target, 64801, &basepoints0, nullptr, nullptr, true, nullptr, GetEffect(0));
                     }
                 }
+                //                      Clearcasting 
+                //if (GetSpellInfo()->Id == 48451) // pode stackar até 2 com (Futura Passive Spell - Set/Glyph ?) - Nao funciona direito - modifica a quantidade de stacks on Apply só (testado com lifebloom dá 4 stacks de uma vez)
+                //{
+                //    if (caster->HasAura(83078)) // example
+                //    {
+                //        m_stackAmount = 2;
+                //        //m_procCharges = 0;
+                //    }
+                //    break;
+                //}
                 break;
             case SPELLFAMILY_PRIEST:
                 if (!caster)

@@ -3704,6 +3704,8 @@ SpellCastResult Spell::prepare(SpellCastTargets const* targets, AuraEffect const
 
     // don't allow channeled spells / spells with cast time to be casted while moving
     // (even if they are interrupted on moving, spells with almost immediate effect get to have their effect processed before movement interrupter kicks in)
+    // Se tiver andando, nao deixa começar o cast de spells. É necessario dar patch no client para castar andando em spells antigas [remover interrupt_flag]) 83292 = novo scorch
+    //if ((m_spellInfo->IsChanneled() || m_casttime) && unitCaster && unitCaster->IsPlayer() && unitCaster->isMoving() && m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT && !IsTriggered()/*&& m_spellInfo->Id != 83292*/)
     if ((m_spellInfo->IsChanneled() || m_casttime) && unitCaster && unitCaster->IsPlayer() && unitCaster->isMoving() && m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT && !IsTriggered())
     {
         // 1. Has casttime, 2. Or doesn't have flag to allow action during channel
@@ -4584,14 +4586,14 @@ void Spell::update(uint32 difftime)
         return;
     }
 
-    // check if the player caster has moved before the spell finished
+    // check if the player caster has moved before the spell finished   (Cancela o cast se começar a andar após castar)
     // xinef: added preparing state (real cast, skip channels as they have other flags for this)
     if ((unitCaster && unitCaster->IsPlayer() && m_timer != 0) &&
             unitCaster->isMoving() && (m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_MOVEMENT) && m_spellState == SPELL_STATE_PREPARING &&
             (m_spellInfo->Effects[0].Effect != SPELL_EFFECT_STUCK || !unitCaster->HasUnitMovementFlag(MOVEMENTFLAG_FALLING_FAR)))
     {
         // don't cancel for melee, autorepeat, triggered and instant spells
-        if (!IsNextMeleeSwingSpell() && !IsAutoRepeat() && !IsTriggered())
+        if (!IsNextMeleeSwingSpell() && !IsAutoRepeat() && !IsTriggered()) // && m_spellInfo->Id != 83292) // scorch test
             cancel(true);
     }
 

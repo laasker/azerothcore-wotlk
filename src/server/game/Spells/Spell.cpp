@@ -7588,7 +7588,7 @@ SpellCastResult Spell::CheckRange(bool strict)
             // carrying them (e.g. Yogg-Saron's Constrictor Tentacle grab).
             bool const targetIsVehicleBase = unitCaster->GetVehicleBase() == target;
 
-            // Xinef: Spells with 5yd range can hit target 9yd away?
+            // Xinef: Spells with 5yd range can hit target 9yd away? 
             if (range_type == SPELL_RANGE_MELEE)
             {
                 float real_max_range = max_range;

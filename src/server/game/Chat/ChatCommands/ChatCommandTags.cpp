@@ -22,6 +22,9 @@
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "Player.h"
+#include <string>
+#include <utility>
+#include <vector>
 
 using namespace Acore::Impl::ChatCommands;
 
@@ -114,19 +117,54 @@ ChatCommandResult Acore::ChatCommands::PlayerIdentifier::TryConsume(ChatHandler 
         if (val.holds_alternative<Hyperlink<player>>())
             _name.assign(static_cast<std::string_view>(val.get<Hyperlink<player>>()));
         else
+        {
+            std::vector<std::string_view> nameParts;
+            std::string_view remainingArgs = args;
+            while (Acore::Impl::ChatCommands::TokenizeResult token = Acore::Impl::ChatCommands::tokenize(remainingArgs))
+            {
+                nameParts.push_back(token.token);
+                remainingArgs = token.tail;
+            }
+
+            // Try the longest name first so character names containing spaces are resolved as one argument.
+            for (std::size_t partCount = nameParts.size(); partCount > 0; --partCount)
+            {
+                std::string candidate;
+                for (std::size_t i = 0; i < partCount; ++i)
+                {
+                    if (i)
+                        candidate.push_back(' ');
+                    candidate.append(nameParts[i]);
+                }
+
+                if (!normalizePlayerName(candidate))
+                    continue;
+
+                Player* player = ObjectAccessor::FindPlayerByName(candidate);
+                ObjectGuid guid = player ? player->GetGUID() : sCharacterCache->GetCharacterGuidByName(candidate);
+                if (!guid)
+                    continue;
+
+                _name = std::move(candidate);
+                _player = player;
+                _guid = guid;
+                return remainingArgs;
+            }
+
             _name.assign(val.get<std::string_view>());
+            if (!normalizePlayerName(_name))
+                return FormatAcoreString(handler, LANG_CMDPARSER_CHAR_NAME_INVALID, _name);
+
+            return FormatAcoreString(handler, LANG_CMDPARSER_CHAR_NAME_NO_EXIST, _name);
+        }
 
         if (!normalizePlayerName(_name))
             return FormatAcoreString(handler, LANG_CMDPARSER_CHAR_NAME_INVALID, _name);
 
         if ((_player = ObjectAccessor::FindPlayerByName(_name)))
-        {
             _guid = _player->GetGUID();
-        }
         else if (!(_guid = sCharacterCache->GetCharacterGuidByName(_name)))
-        {
             return FormatAcoreString(handler, LANG_CMDPARSER_CHAR_NAME_NO_EXIST, _name);
-        }
 
         return next;
     }

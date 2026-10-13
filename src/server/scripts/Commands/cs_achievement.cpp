@@ -16,9 +16,12 @@
  */
 
 #include "AchievementMgr.h"
+#include "ChatCommandTags.h"
 #include "Chat.h"
 #include "CommandScript.h"
 #include "Language.h"
+#include "ObjectAccessor.h"
+#include "ObjectMgr.h"
 #include "Player.h"
 #include "RBAC.h"
 
@@ -43,26 +46,58 @@ public:
         return commandTable;
     }
 
-    static bool HandleAchievementAddCommand(ChatHandler* handler, AchievementEntry const* achievementEntry, Optional<PlayerIdentifier> player)
+    static bool HandleAchievementAddCommand(ChatHandler* handler, AchievementEntry const* achievementEntry, Tail playerNameArg)
     {
-        if (!player)
-            player = PlayerIdentifier::FromTargetOrSelf(handler);
+        Player* targetPlayer = nullptr;
+        ObjectGuid targetGuid;
+        std::string targetName;
 
-        if (!player)
+        if (!playerNameArg.empty())
         {
-            handler->SendErrorMessage(LANG_PLAYER_NOT_FOUND);
-            return false;
-        }
+            std::string nameArgument(playerNameArg);
+            targetName = nameArgument.find("|Hplayer:") != std::string::npos
+                ? handler->extractPlayerNameFromLink(nameArgument.data())
+                : nameArgument;
 
-        if (player->IsConnected())
-        {
-            player->GetConnectedPlayer()->CompletedAchievement(achievementEntry);
-            handler->PSendSysMessage(LANG_ACHIEVEMENT_ADD_ONLINE, achievementEntry->ID, achievementEntry->name[0], player->GetName());
+            if (targetName.empty() || !normalizePlayerName(targetName))
+            {
+                handler->SendErrorMessage(LANG_PLAYER_NOT_FOUND);
+                return false;
+            }
+
+            targetPlayer = ObjectAccessor::FindPlayerByName(targetName, false);
+            targetGuid = targetPlayer ? targetPlayer->GetGUID() : sCharacterCache->GetCharacterGuidByName(targetName);
+
+            if (!targetGuid)
+            {
+                handler->SendErrorMessage(LANG_PLAYER_NOT_FOUND);
+                return false;
+            }
         }
         else
         {
-            sAchievementMgr->CompletedAchievementForOfflinePlayer(player->GetGUID().GetCounter(), achievementEntry);
-            handler->PSendSysMessage(LANG_ACHIEVEMENT_ADD_OFFLINE, achievementEntry->ID, achievementEntry->name[0], player->GetName());
+            Optional<PlayerIdentifier> player = PlayerIdentifier::FromTargetOrSelf(handler);
+            if (!player)
+            {
+                handler->SendErrorMessage(LANG_PLAYER_NOT_FOUND);
+                return false;
+            }
+
+            targetName = player->GetName();
+            targetGuid = player->GetGUID();
+            if (player->IsConnected())
+                targetPlayer = player->GetConnectedPlayer();
+        }
+
+        if (targetPlayer)
+        {
+            targetPlayer->CompletedAchievement(achievementEntry);
+            handler->PSendSysMessage(LANG_ACHIEVEMENT_ADD_ONLINE, achievementEntry->ID, achievementEntry->name[0], targetName);
+        }
+        else
+        {
+            sAchievementMgr->CompletedAchievementForOfflinePlayer(targetGuid.GetCounter(), achievementEntry);
+            handler->PSendSysMessage(LANG_ACHIEVEMENT_ADD_OFFLINE, achievementEntry->ID, achievementEntry->name[0], targetName);
         }
 
         return true;

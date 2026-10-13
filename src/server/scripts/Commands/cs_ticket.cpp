@@ -67,11 +67,8 @@ public:
         return commandTable;
     }
 
-    static bool HandleGMTicketAssignToCommand(ChatHandler* handler, uint32 ticketId, std::string target)
+    static bool HandleGMTicketAssignToCommand(ChatHandler* handler, uint32 ticketId, PlayerIdentifier target)
     {
-        if (!normalizePlayerName(target))
-            return false;
-
         GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
         if (!ticket || ticket->IsClosed())
         {
@@ -80,7 +77,7 @@ public:
         }
 
         // Get target information
-        ObjectGuid targetGuid = sCharacterCache->GetCharacterGuidByName(target);
+        ObjectGuid targetGuid = target.GetGUID();
         uint32 targetAccountId = sCharacterCache->GetCharacterAccountIdByGuid(targetGuid);
         uint32 targetGmLevel = AccountMgr::GetSecurity(targetAccountId, realm.Id.Realm);
 
@@ -103,7 +100,7 @@ public:
         Player* player = handler->GetSession() ? handler->GetSession()->GetPlayer() : nullptr;
         if (player && ticket->IsAssignedNotTo(player->GetGUID()))
         {
-            handler->PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target);
+            handler->PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.GetName());
             return true;
         }
 
@@ -113,7 +110,7 @@ public:
         ticket->SaveToDB(trans);
         sTicketMgr->UpdateLastChange(ticket);
 
-        std::string msg = ticket->FormatMessageString(*handler, nullptr, target.c_str(), nullptr, nullptr);
+        std::string msg = ticket->FormatMessageString(*handler, nullptr, target.GetName().c_str(), nullptr, nullptr);
         handler->SendGlobalGMSysMessage(msg.c_str());
         return true;
     }
@@ -392,31 +389,10 @@ public:
         return true;
     }
 
-    static bool HandleGMTicketGetByNameCommand(ChatHandler* handler, std::string name)
+    static bool HandleGMTicketGetByNameCommand(ChatHandler* handler, PlayerIdentifier target)
     {
-        if (!normalizePlayerName(name))
-            return false;
-
-        // Detect target's GUID
-        ObjectGuid guid;
-        if (Player* player = ObjectAccessor::FindPlayerByName(name, false))
-        {
-            guid = player->GetGUID();
-        }
-        else
-        {
-            guid = sCharacterCache->GetCharacterGuidByName(name);
-        }
-
-        // Target must exist
-        if (!guid)
-        {
-            handler->SendSysMessage(LANG_NO_PLAYERS_FOUND);
-            return true;
-        }
-
         // Ticket must exist
-        GmTicket* ticket = sTicketMgr->GetTicketByPlayer(guid);
+        GmTicket* ticket = sTicketMgr->GetTicketByPlayer(target.GetGUID());
         if (!ticket)
         {
             handler->SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);

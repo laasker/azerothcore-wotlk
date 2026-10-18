@@ -12523,7 +12523,7 @@ bool Player::InArenaQueue() const
 {
     for (uint8 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
     {
-        if (_BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_2v2 || _BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_3v3)
+        if (_BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_2v2 || _BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_3v3 || _BgBattlegroundQueueID[i].bgQueueTypeId == BATTLEGROUND_QUEUE_5v5 || _BgBattlegroundQueueID[i].bgQueueTypeId == 12/*solo3v3*/)
         {
             return true;
         }

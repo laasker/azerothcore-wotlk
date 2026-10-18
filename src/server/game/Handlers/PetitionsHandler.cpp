@@ -17,6 +17,7 @@
 
 #include "ArenaTeam.h"
 #include "ArenaTeamMgr.h"
+#include "Chat.h"
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "Log.h"
@@ -116,10 +117,8 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket& recvData)
                 type = ARENA_TEAM_CHARTER_3v3_TYPE;
                 break;
             case 3:
-                charterid = ARENA_TEAM_CHARTER_5v5;
-                cost = sWorld->getIntConfig(CONFIG_CHARTER_COST_ARENA_5v5);
-                type = ARENA_TEAM_CHARTER_5v5_TYPE;
-                break;
+                ChatHandler(this).SendNotification("5v5 rated arena is disabled.");
+                return;
             default:
                 LOG_DEBUG("network", "unknown selection at buy arena petition: {}", clientIndex);
                 return;
@@ -687,6 +686,12 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket& recvData)
     // Only the petition owner can turn in the petition
     if (_player->GetGUID() != ownerGuid)
         return;
+
+    if (type == ARENA_TEAM_CHARTER_5v5_TYPE)
+    {
+        ChatHandler(this).SendNotification("5v5 rated arena is disabled.");
+        return;
+    }
 
     // Petition type (guild/arena) specific checks
     if (type == GUILD_CHARTER_TYPE)

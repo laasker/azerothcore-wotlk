@@ -685,6 +685,7 @@ uint32 ArenaTeam::GetPoints(uint32 memberRating)
         points *= sWorld->getRate(RATE_ARENA_POINTS_3V3);
 
     sScriptMgr->OnGetArenaPoints(this, points);
+    sScriptMgr->OnGetPoints(this, memberRating, points);
 
     points *= sWorld->getRate(RATE_ARENA_POINTS);
 

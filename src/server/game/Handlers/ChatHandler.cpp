@@ -607,7 +607,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             break;
         case CHAT_MSG_AFK:
             {
-                if (!sender->IsInCombat())
+                bool canLeaveBattlegroundWithAfk = sender->InBattleground()
+                    && !sender->GetSession()->HasPermission(rbac::RBAC_PERM_CAN_AFK_ON_BATTLEGROUND);
+                if (!sender->IsInCombat() || canLeaveBattlegroundWithAfk)
                 {
                     if (sender->isAFK())                       // Already AFK
                     {

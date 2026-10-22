@@ -52,6 +52,8 @@
 #include "WeatherMgr.h"
 #include "WorldSessionMgr.h"
 
+#include <iterator>
+
 /// @todo: this import is not necessary for compilation and marked as unused by the IDE
 //  however, for some reasons removing it would cause a damn linking issue
 //  there is probably some underlying problem with imports which should properly addressed
@@ -256,7 +258,8 @@ public:
             return false;
         }
 
-        if (tokens.size() != uint16(count + 2))
+        uint32 remainingPlayerNames = static_cast<uint32>(std::distance(tokensItr, tokens.end()));
+        if (remainingPlayerNames < count)
         {
             handler->SendErrorMessage("Invalid number of nicknames for this bracket.");
             return false;
@@ -269,16 +272,42 @@ public:
         std::array<Player*, 10> players = {};
         uint8 cnt = 0;
 
-        for (; tokensItr != tokens.end(); ++tokensItr)
+        for (uint8 playerIndex = 0; playerIndex < count; ++playerIndex)
         {
-            last_name = std::string(*tokensItr);
-            plr = ObjectAccessor::FindPlayerByName(last_name, false);
+            plr = nullptr;
+            uint32 playerSlotsLeft = count - playerIndex;
+            remainingPlayerNames = static_cast<uint32>(std::distance(tokensItr, tokens.end()));
+            uint32 maxNameParts = remainingPlayerNames - playerSlotsLeft + 1;
+            uint32 nameParts = 0;
+
+            for (uint32 parts = maxNameParts; parts > 0; --parts)
+            {
+                std::string candidate;
+                auto candidateItr = tokensItr;
+                for (uint32 part = 0; part < parts; ++part, ++candidateItr)
+                {
+                    if (!candidate.empty())
+                        candidate += ' ';
+                    candidate += *candidateItr;
+                }
+
+                if (Player* candidatePlayer = ObjectAccessor::FindPlayerByName(candidate, false))
+                {
+                    last_name = std::move(candidate);
+                    plr = candidatePlayer;
+                    nameParts = parts;
+                    break;
+                }
+            }
 
             if (!plr)
             {
+                last_name = std::string(*tokensItr);
                 error = 1;
                 break;
             }
+
+            std::advance(tokensItr, nameParts);
 
             if (!plr->IsInWorld() || !plr->FindMap() || plr->IsBeingTeleported())
             {

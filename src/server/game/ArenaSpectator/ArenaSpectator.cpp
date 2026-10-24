@@ -20,11 +20,24 @@
 #include "BattlegroundMgr.h"
 #include "LFGMgr.h"
 #include "Map.h"
+//#include "ObjectMgr.h"
 #include "Pet.h"
 #include "Player.h"
 #include "SpellAuraEffects.h"
 #include "SpellAuras.h"
 #include "World.h"
+
+//namespace
+//{
+//    Player* FindSpectatorTargetByName(std::string const& name)
+//    {
+//        std::string normalizedName = name;
+//        if (!normalizePlayerName(normalizedName))
+//            return nullptr;
+//
+//        return ObjectAccessor::FindPlayerByName(normalizedName);
+//    }
+//}
 
 bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::string const& name)
 {
@@ -49,6 +62,7 @@ bool ArenaSpectator::HandleSpectatorSpectateCommand(ChatHandler* handler, std::s
     }
 
     Player* spectate = ObjectAccessor::FindPlayerByName(name);
+    //Player* spectate = FindSpectatorTargetByName(name);
     if (!spectate)
     {
         handler->SendSysMessage("Requested player not found.");
@@ -207,6 +221,7 @@ bool ArenaSpectator::HandleSpectatorWatchCommand(ChatHandler* handler, std::stri
         return true;
 
     Player* spectate = ObjectAccessor::FindPlayerByName(name);
+    //Player* spectate = FindSpectatorTargetByName(name);
     if (!spectate || !spectate->IsAlive() || spectate->IsSpectator() || spectate->GetGUID() == player->GetGUID() || !spectate->IsInWorld() || !spectate->FindMap() || spectate->IsBeingTeleported() || spectate->FindMap() != player->FindMap() || !bg->IsPlayerInBattleground(spectate->GetGUID()))
         return true;
 

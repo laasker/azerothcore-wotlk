@@ -89,17 +89,17 @@ public:
         return true;
     }
 
-    static bool HandleSpectatorSpectateCommand(ChatHandler* handler, std::string const& name)
+    static bool HandleSpectatorSpectateCommand(ChatHandler* handler, Tail name)
     {
-        if (!ArenaSpectator::HandleSpectatorSpectateCommand(handler, name))
+        if (!ArenaSpectator::HandleSpectatorSpectateCommand(handler, std::string(name)))
             return false;
 
         return true;
     }
 
-    static bool HandleSpectatorWatchCommand(ChatHandler* handler, std::string const& name)
+    static bool HandleSpectatorWatchCommand(ChatHandler* handler, Tail name)
     {
-        if (!ArenaSpectator::HandleSpectatorWatchCommand(handler, name))
+        if (!ArenaSpectator::HandleSpectatorWatchCommand(handler, std::string(name)))
             return false;
 
         return true;
